@@ -2,740 +2,1741 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PontoHora</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="PontoHora">
+<meta name="theme-color" content="#0f172a">
+<title>PontoHora Pro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#f5f5f3;--surface:#fff;--border:#e0ddd8;--border2:#ccc9c2;
-  --text:#1a1a1a;--text2:#6b6b6b;--text3:#9e9e9e;
-  --green-bg:#eaf3de;--green-tx:#3b6d11;
-  --red-bg:#fcebeb;--red-tx:#a32d2d;
-  --amber-bg:#faeeda;--amber-tx:#854f0b;
-  --teal-bg:#e1f5ee;--teal-tx:#0f6e56;
-  --blue-bg:#e6f1fb;--blue-tx:#185fa5;
-  --r:10px;--rs:6px;--font:-apple-system,'Segoe UI',sans-serif;
+  --ink:#0f172a;--ink2:#334155;--muted:#64748b;--line:#e2e8f0;
+  --bg:#f8fafc;--card:#ffffff;
+  --blue:#2563eb;--blue-d:#1d4ed8;--blue-l:#eff6ff;
+  --green:#16a34a;--green-l:#f0fdf4;
+  --red:#dc2626;--red-l:#fef2f2;
+  --amber:#d97706;--amber-l:#fffbeb;
+  --r:12px;--sh:0 1px 3px rgba(0,0,0,.06),0 4px 12px rgba(0,0,0,.05);
+  --sidebar:240px;--font:'DM Sans',system-ui,sans-serif;--mono:'DM Mono',monospace;
 }
-body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center}
-.app{width:100%;max-width:480px;min-height:100vh;background:var(--surface);display:flex;flex-direction:column;border-left:.5px solid var(--border);border-right:.5px solid var(--border)}
-.screen{display:none;flex-direction:column;flex:1}
-.screen.active{display:flex}
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:.5px solid var(--border);background:var(--surface);position:sticky;top:0;z-index:10}
-.topbar h1{font-size:15px;font-weight:600}
-.nav{display:flex;border-top:.5px solid var(--border);background:var(--surface)}
-.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 4px 12px;border:none;background:transparent;cursor:pointer;color:var(--text3);font-size:10px;gap:3px;font-family:var(--font);transition:color .15s}
-.nav-btn i{font-size:21px}
-.nav-btn.active{color:var(--text)}
-.content{flex:1;overflow-y:auto;padding:16px}
-.card{background:var(--surface);border:.5px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:12px}
-.card-title{font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:var(--rs);border:.5px solid var(--border2);background:transparent;cursor:pointer;font-size:13px;font-weight:500;color:var(--text);font-family:var(--font);transition:background .12s;white-space:nowrap}
-.btn:hover{background:var(--bg)}
-.btn:active{transform:scale(.98)}
-.btn-dark{background:var(--text);color:var(--surface);border-color:var(--text)}
-.btn-dark:hover{opacity:.85;background:var(--text)}
-.btn-full{width:100%;justify-content:center;margin-bottom:8px}
-.btn-danger{border-color:#e24b4a;color:#a32d2d}
-.btn-danger:hover{background:var(--red-bg)}
+body.dark{
+  --ink:#f1f5f9;--ink2:#cbd5e1;--muted:#94a3b8;--line:#263350;
+  --bg:#0b1120;--card:#131e30;--blue-l:#162444;--green-l:#052e16;
+  --red-l:#3b0a0a;--amber-l:#2d1700;
+}
+body.dark .topbar{background:#131e30;border-color:#263350}
+body.dark .sb{background:#07101e}
+body.dark .card{background:#131e30;border-color:#263350}
+body.dark input,body.dark select,body.dark textarea{background:#0b1120!important;color:#f1f5f9!important;border-color:#263350!important}
+body.dark .tbl th{background:#0b1120;color:#94a3b8}
+body.dark .tbl td{border-color:#263350}
+body.dark .tbl tr:hover td{background:#162032}
+body.dark .pr,.dark .dr{border-color:#263350}
+body.dark .fuc,.dark .fcard{background:#131e30;border-color:#263350}
+body.dark .ni{color:rgba(255,255,255,.45)}
+body.dark .ni:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.8)}
+body.dark .ni.on{background:rgba(37,99,235,.3);color:#93c5fd}
+body.dark .bo{border-color:#263350;color:#cbd5e1}
+body.dark .badge.b{background:#162444;color:#93c5fd}
+body.dark .badge.g{background:#052e16;color:#4ade80}
+body.dark .badge.a{background:#2d1700;color:#fbbf24}
+body.dark .pt.E{background:#052e16;color:#4ade80}
+body.dark .pt.PI,.dark .pt.PV{background:#2d1700;color:#fbbf24}
+body.dark .pt.S{background:#3b0a0a;color:#f87171}
+body.dark .ab.i{background:#162444;color:#93c5fd}
+body.dark .ab.s{background:#052e16;color:#4ade80}
+body.dark .ab.w{background:#2d1700;color:#fbbf24}
+body.dark .ab.d{background:#3b0a0a;color:#f87171}
+body.dark details>div{background:#0b1120!important}
+body{transition:background .25s,color .25s}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--ink);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* LOGIN */
+#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0f172a;
+  background-image:radial-gradient(ellipse 60% 50% at 20% 20%,rgba(37,99,235,.3) 0%,transparent 60%),
+    radial-gradient(ellipse 40% 60% at 80% 80%,rgba(99,102,241,.2) 0%,transparent 60%);
+  padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+.lc{width:100%;max-width:420px;padding:0 16px;position:relative;z-index:1;animation:lcUp .6s ease .1s both}
+@keyframes lcUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.lc-logo{text-align:center;padding-bottom:32px}
+.lc-logo-mark{width:72px;height:72px;border-radius:20px;background:linear-gradient(135deg,#2563eb,#1e40af);
+  display:inline-flex;align-items:center;justify-content:center;font-size:30px;margin-bottom:14px;
+  box-shadow:0 0 0 10px rgba(37,99,235,.12),0 16px 40px rgba(37,99,235,.5)}
+.lc-logo h1{color:#fff;font-size:24px;font-weight:800;letter-spacing:-.5px}
+.lc-logo p{color:rgba(255,255,255,.45);font-size:13px;margin-top:4px}
+.lc-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:32px;backdrop-filter:blur(20px)}
+.fg{margin-bottom:16px}
+.fg label{display:block;font-size:11px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.8px;margin-bottom:7px}
+.fg input,.fg select{width:100%;padding:12px 14px;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.12);
+  border-radius:10px;color:#fff;font-size:14px;font-family:var(--font);outline:none;transition:border-color .2s}
+.fg input::placeholder{color:rgba(255,255,255,.3)}
+.fg input:focus{border-color:rgba(37,99,235,.8)}
+.fg select option{background:#1e293b;color:#fff}
+.btn-login{width:100%;padding:13px;background:linear-gradient(135deg,#2563eb,#1d4ed8);border:none;border-radius:10px;
+  color:#fff;font-size:15px;font-weight:700;font-family:var(--font);cursor:pointer;transition:opacity .2s}
+.btn-login:hover{opacity:.88}
+.btn-login:disabled{opacity:.5;cursor:not-allowed}
+.lc-links{text-align:center;margin-top:14px}
+.link-btn{background:none;border:none;color:rgba(255,255,255,.5);cursor:pointer;font-size:13px;text-decoration:underline;font-family:var(--font)}
+.link-btn:hover{color:#fff}
+.err-msg{background:rgba(220,38,38,.15);border:1px solid rgba(220,38,38,.3);color:#fca5a5;padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:14px}
+
+/* CONFIG GITHUB */
+.cfg-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:28px;margin-top:16px}
+.cfg-steps{margin-top:16px}
+.cfg-step{display:flex;gap:10px;margin-bottom:10px;font-size:13px;color:rgba(255,255,255,.6);line-height:1.6}
+.cfg-step-num{background:#2563eb;color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
+.step-link{color:#93c5fd;text-decoration:none}
+.step-link:hover{text-decoration:underline}
+
+/* APP */
+#app-screen{display:none}
+.layout{display:flex;min-height:100vh}
+
+/* SIDEBAR */
+.sb{width:var(--sidebar);position:fixed;top:0;left:0;height:100vh;z-index:60;background:var(--ink);
+  border-right:1px solid rgba(255,255,255,.06);display:flex;flex-direction:column;
+  transition:transform .3s cubic-bezier(.4,0,.2,1);padding-top:env(safe-area-inset-top)}
+.sb-brand{padding:20px 18px 14px;border-bottom:1px solid rgba(255,255,255,.06)}
+.sb-mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#2563eb,#1e40af);
+  display:inline-flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:8px}
+.sb-brand h2{color:#fff;font-size:14px;font-weight:800}
+.sb-brand small{color:rgba(255,255,255,.25);font-size:10px}
+.sb-nav{flex:1;padding:10px 8px;overflow-y:auto}
+.sb-sec{font-size:9px;font-weight:700;color:rgba(255,255,255,.25);text-transform:uppercase;letter-spacing:1.2px;padding:12px 10px 5px}
+.ni{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;cursor:pointer;
+  color:rgba(255,255,255,.5);font-size:13px;font-weight:500;transition:all .15s;
+  border:none;background:none;width:100%;text-align:left;font-family:var(--font);margin-bottom:1px}
+.ni:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.85)}
+.ni.on{background:rgba(37,99,235,.25);color:#93c5fd;font-weight:700}
+.ni .ico{width:20px;text-align:center;font-size:14px;flex-shrink:0}
+.sb-foot{padding:12px;border-top:1px solid rgba(255,255,255,.06);margin-top:auto;flex-shrink:0;
+  padding-bottom:max(12px,env(safe-area-inset-bottom))}
+.sb-user{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#7c3aed);
+  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px;flex-shrink:0}
+.sb-uname{color:#fff;font-size:12px;font-weight:700;line-height:1.2}
+.sb-urole{color:rgba(255,255,255,.35);font-size:10px;margin-top:1px}
+.btn-sair{width:100%;padding:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  border-radius:7px;color:rgba(255,255,255,.5);cursor:pointer;font-size:12px;font-family:var(--font);transition:all .15s}
+.btn-sair:hover{background:rgba(255,255,255,.12);color:#fff}
+
+/* TOPBAR */
+.main{margin-left:var(--sidebar);flex:1;display:flex;flex-direction:column}
+.topbar{height:56px;background:var(--card);border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;position:sticky;top:0;z-index:40}
+.tb-left{display:flex;align-items:center;gap:12px}
+.tb-title{font-size:16px;font-weight:800;letter-spacing:-.3px}
+.tb-sub{font-size:12px;color:var(--muted);margin-top:1px}
+.tb-right{display:flex;align-items:center;gap:14px}
+.tb-date{font-size:12px;color:var(--muted);font-weight:600;font-family:var(--mono)}
+.burger{background:none;border:none;cursor:pointer;font-size:18px;color:var(--ink);padding:4px;display:none}
+.dm-btn{width:38px;height:20px;border-radius:100px;border:none;cursor:pointer;background:#475569;
+  position:relative;transition:background .25s;flex-shrink:0}
+.dm-btn::after{content:'';position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform .25s}
+body.dark .dm-btn{background:var(--blue)}
+body.dark .dm-btn::after{transform:translateX(18px)}
+.gh-status{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)}
+.gh-dot{width:7px;height:7px;border-radius:50%;background:#94a3b8}
+.gh-dot.ok{background:#16a34a}
+.gh-dot.err{background:#dc2626}
+.gh-dot.saving{background:#d97706;animation:pulse .8s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* CONTENT */
+.content{padding:24px;max-width:900px;width:100%}
+.page{display:none}.page.on{display:block}
+.ph{margin-bottom:20px}
+.ph h2{font-size:20px;font-weight:800;letter-spacing:-.4px}
+.ph p{font-size:13px;color:var(--muted);margin-top:3px}
+
+/* CARDS */
+.card{background:var(--card);border-radius:var(--r);border:1px solid var(--line);padding:20px;margin-bottom:14px;box-shadow:var(--sh)}
+.ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.ct{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.7px}
+
+/* CLOCK */
+.cw{background:var(--ink);border-radius:16px;padding:24px 26px;margin-bottom:14px;position:relative;overflow:hidden;box-shadow:0 8px 32px rgba(15,23,42,.4)}
+.cw::before{content:'';position:absolute;right:-60px;top:-60px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.2) 0%,transparent 70%)}
+.cw-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;position:relative;z-index:1}
+.cw-date{font-size:12px;color:rgba(255,255,255,.5);font-weight:500}
+.cw-badge{background:rgba(37,99,235,.3);border:1px solid rgba(37,99,235,.4);padding:3px 10px;border-radius:100px;font-size:11px;color:#93c5fd;font-weight:700}
+.cw-time{font-size:58px;font-weight:300;color:#fff;letter-spacing:-3px;font-family:var(--mono);line-height:1;position:relative;z-index:1}
+.cw-status{font-size:12px;color:rgba(255,255,255,.4);margin-top:5px;position:relative;z-index:1}
+.cw-bar-wrap{margin-top:16px;position:relative;z-index:1}
+.cw-bar-lbl{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.45);margin-bottom:5px}
+.cw-bar-track{background:rgba(255,255,255,.08);border-radius:100px;height:6px;overflow:hidden}
+.cw-bar-fill{height:100%;background:linear-gradient(90deg,#22c55e,#4ade80);border-radius:100px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.punch-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:18px;position:relative;z-index:1}
+.pb{padding:12px 8px;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);
+  color:rgba(255,255,255,.7);border-radius:10px;cursor:pointer;font-size:13px;font-weight:700;
+  font-family:var(--font);transition:all .2s}
+.pb:hover:not(:disabled){background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.35)}
+.pb.e{border-color:rgba(34,197,94,.5);color:#4ade80}
+.pb.s{border-color:rgba(248,113,113,.5);color:#f87171}
+.pb.p{border-color:rgba(251,191,36,.5);color:#fbbf24}
+.pb:disabled{opacity:.28;cursor:not-allowed}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
+.si{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center;box-shadow:var(--sh)}
+.sv{font-size:20px;font-weight:800;color:var(--blue)}
+.sl{font-size:11px;color:var(--muted);margin-top:3px;font-weight:600}
+.si.g .sv{color:var(--green)}.si.a .sv{color:var(--amber)}.si.r .sv{color:var(--red)}
+
+/* REGISTROS */
+.pr{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line)}
+.pr:last-child{border-bottom:none}
+.pt{font-size:11px;font-weight:700;padding:3px 9px;border-radius:100px}
+.pt.E{background:var(--green-l);color:var(--green)}
+.pt.PI,.pt.PV{background:var(--amber-l);color:var(--amber)}
+.pt.S{background:var(--red-l);color:var(--red)}
+.ph-time{font-size:16px;font-weight:800;font-family:var(--mono)}
+.pe-btn{background:none;border:1px solid var(--line);border-radius:6px;padding:4px 9px;cursor:pointer;font-size:12px;color:var(--muted);transition:all .15s;font-family:var(--font)}
+.pe-btn:hover{border-color:var(--blue);color:var(--blue)}
+
+/* ALERTAS */
+.ab{border-radius:10px;padding:11px 14px;margin-bottom:10px;display:flex;align-items:flex-start;gap:9px;font-size:13px;font-weight:500;line-height:1.5}
+.ab.i{background:var(--blue-l);color:var(--blue)}
+.ab.w{background:var(--amber-l);color:#92400e}
+.ab.s{background:var(--green-l);color:#14532d}
+.ab.d{background:var(--red-l);color:var(--red)}
+
+/* BOTOES */
+.btn{padding:9px 16px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:all .15s;font-family:var(--font);display:inline-flex;align-items:center;gap:7px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
 .btn-sm{padding:6px 12px;font-size:12px}
-.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
-.field{margin-bottom:14px}
-.field label{display:block;font-size:12px;color:var(--text2);margin-bottom:5px;font-weight:500}
-.field input,.field select{width:100%;padding:9px 11px;border:.5px solid var(--border2);border-radius:var(--rs);font-size:14px;font-family:var(--font);color:var(--text);background:var(--surface);outline:none}
-.field input:focus{border-color:var(--text)}
-.field input[type=password]{letter-spacing:2px}
-.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.badge{display:inline-block;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px}
-.b-entrada{background:var(--green-bg);color:var(--green-tx)}
-.b-saida{background:var(--red-bg);color:var(--red-tx)}
-.b-almoco_ini{background:var(--amber-bg);color:var(--amber-tx)}
-.b-almoco_fim{background:var(--teal-bg);color:var(--teal-tx)}
-.avatar{width:38px;height:38px;border-radius:50%;background:var(--blue-bg);color:var(--blue-tx);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
-.clock-wrap{text-align:center;padding:24px 0 16px}
-.clock-time{font-size:52px;font-weight:300;letter-spacing:-3px;font-variant-numeric:tabular-nums;line-height:1}
-.clock-date{font-size:13px;color:var(--text2);margin-top:6px;text-transform:capitalize}
-.ponto-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:4px 0 16px}
-.ponto-card{border:.5px solid var(--border);border-radius:var(--r);padding:14px 10px;text-align:center;cursor:pointer;background:var(--surface);transition:all .12s;user-select:none}
-.ponto-card:hover{border-color:var(--border2);background:var(--bg)}
-.ponto-card:active{transform:scale(.97)}
-.ponto-card.done{opacity:.35;pointer-events:none}
-.ponto-card.loading{opacity:.6;pointer-events:none}
-.pc-icon{font-size:24px;display:block;margin-bottom:5px}
-.pc-label{font-size:12px;font-weight:600;color:var(--text)}
-.pc-hora{font-size:11px;color:var(--text2);margin-top:2px;font-variant-numeric:tabular-nums}
-.list-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:.5px solid var(--border);font-size:13px}
-.list-row:last-child{border-bottom:none}
-.msg{padding:10px 13px;border-radius:var(--rs);font-size:13px;margin-bottom:12px;font-weight:500;display:flex;align-items:center;gap:8px}
-.msg-ok{background:var(--green-bg);color:var(--green-tx)}
-.msg-err{background:var(--red-bg);color:var(--red-tx)}
-.msg-info{background:var(--blue-bg);color:var(--blue-tx)}
-.spinner{width:14px;height:14px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
-@keyframes spin{to{transform:rotate(360deg)}}
-.info-box{background:var(--blue-bg);border-radius:var(--rs);padding:12px 14px;font-size:12px;color:var(--blue-tx);margin-bottom:12px;line-height:1.7}
-.info-box strong{font-weight:700}
-kbd{background:rgba(24,95,165,.13);padding:1px 5px;border-radius:3px;font-family:monospace;font-size:11px}
-code{font-size:11px;background:var(--bg);padding:1px 5px;border-radius:3px;font-family:monospace;border:.5px solid var(--border)}
-#config-screen .content{justify-content:center;display:flex;flex-direction:column}
-.config-brand{text-align:center;margin-bottom:28px}
-.config-brand .logo-icon{font-size:44px;color:var(--text)}
-.config-brand h2{font-size:24px;font-weight:700;margin-top:8px}
-.config-brand p{font-size:13px;color:var(--text2);margin-top:4px}
-#login-screen .content{justify-content:center;display:flex;flex-direction:column}
-.login-brand{text-align:center;margin-bottom:28px}
-.login-brand .logo-icon{font-size:40px;color:var(--text)}
-.login-brand h2{font-size:22px;font-weight:700;margin-top:6px}
-.login-brand p{font-size:13px;color:var(--text2);margin-top:3px}
-.tag-admin{font-size:10px;padding:2px 7px;border-radius:4px;background:#eeedfe;color:#534ab7;font-weight:600;vertical-align:middle}
-.resumo-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
-.resumo-card{background:var(--bg);border-radius:var(--rs);padding:10px 12px}
-.resumo-card .rc-label{font-size:11px;color:var(--text2);margin-bottom:3px}
-.resumo-card .rc-val{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
-.dia-header{font-size:11px;font-weight:700;color:var(--text2);margin:14px 0 6px;text-transform:uppercase;letter-spacing:.5px}
-.step{display:flex;gap:10px;margin-bottom:12px;font-size:13px;line-height:1.6}
-.step-num{background:var(--text);color:var(--surface);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
-.online-dot{width:7px;height:7px;border-radius:50%;background:#3b6d11;display:inline-block;margin-right:4px}
-.offline-dot{width:7px;height:7px;border-radius:50%;background:#a32d2d;display:inline-block;margin-right:4px}
+.bl{background:var(--blue);color:#fff}.bl:hover{background:var(--blue-d)}
+.bg{background:var(--green);color:#fff}.bg:hover{background:#15803d}
+.bo{background:none;border:1.5px solid var(--line);color:var(--ink)}.bo:hover{border-color:var(--blue);color:var(--blue)}
+.br{background:var(--red);color:#fff}.br:hover{background:#b91c1c}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap}
+
+/* FORMS */
+.fr{margin-bottom:12px}
+.fr label{display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+.fr input,.fr select,.fr textarea{width:100%;padding:9px 12px;border:1.5px solid var(--line);border-radius:8px;font-size:14px;outline:none;font-family:var(--font);background:#fafbfc;transition:border-color .15s}
+.fr input:focus,.fr select:focus{border-color:var(--blue)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+
+/* HISTORICO */
+.dr{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line)}
+.dr:last-child{border-bottom:none}
+.dd{font-weight:700;font-size:14px}.ds{font-size:11px;color:var(--muted)}
+.dh{font-size:15px;font-weight:800}.dh.ok{color:var(--green)}.dh.lo{color:var(--red)}
+
+/* SALARIO */
+.sr-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.sr-row:last-child{border-bottom:none}
+.sr-row.tot{font-weight:800;font-size:15px;border-top:2px solid var(--line);margin-top:6px;padding-top:12px}
+.sr-row .d{color:var(--muted)}
+
+/* FUNC CARD */
+.fuc{display:flex;align-items:center;gap:12px;padding:14px;background:var(--card);border:1.5px solid var(--line);border-radius:12px;margin-bottom:10px;cursor:pointer;transition:all .15s;box-shadow:var(--sh)}
+.fuc:hover{border-color:var(--blue)}
+.fua{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--blue),#7c3aed);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;flex-shrink:0}
+.fun{font-weight:700;font-size:15px}.fus{font-size:12px;color:var(--muted);margin-top:2px}
+
+/* MODAL */
+.mb{position:fixed;inset:0;background:rgba(15,23,42,.6);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
+.modal{background:var(--card);border-radius:18px;padding:26px;width:100%;max-width:480px;max-height:88vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.25)}
+.modal h3{font-size:18px;font-weight:800;margin-bottom:18px;letter-spacing:-.3px}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{background:var(--bg);padding:8px 10px;text-align:left;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);border-bottom:2px solid var(--line)}
+.tbl td{padding:9px 10px;border-bottom:1px solid var(--line)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:var(--bg)}
+.tbl td.r,.tbl th.r{text-align:right}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;z-index:999;padding:12px 16px;border-radius:12px;font-size:13px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,.15);display:flex;align-items:center;gap:10px;max-width:320px;transform:translateY(0);opacity:1;transition:all .3s cubic-bezier(.4,0,.2,1)}
+.toast.hide{transform:translateY(120px);opacity:0}
+.toast-n{background:var(--ink);color:#fff}
+.toast-s{background:var(--green);color:#fff}
+.toast-w{background:var(--amber);color:#fff}
+.toast-d{background:var(--red);color:#fff}
+
+/* MISC */
+.badge{display:inline-block;padding:3px 9px;border-radius:100px;font-size:11px;font-weight:700}
+.badge.g{background:var(--green-l);color:var(--green)}
+.badge.b{background:var(--blue-l);color:var(--blue)}
+.badge.a{background:var(--amber-l);color:var(--amber)}
+.badge.r{background:var(--red-l);color:var(--red)}
+.nd{text-align:center;padding:36px;color:var(--muted);font-size:14px}
+.nd-ico{font-size:34px;margin-bottom:8px}
+.sep{border:none;border-top:1px solid var(--line);margin:14px 0}
+.mt8{margin-top:8px}.mt16{margin-top:16px}.mt24{margin-top:24px}
+input[type="time"],input[type="date"]{font-family:var(--mono)}
+
+/* RELATORIO */
+#modal-relatorio{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;overflow-y:auto;padding:20px}
+#rel-conteudo{max-width:700px;margin:0 auto;background:var(--card);border-radius:16px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.3)}
+
+@media(max-width:768px){
+  .sb{transform:translateX(-100%)}
+  .sb.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .burger{display:flex}
+  .stats{grid-template-columns:1fr 1fr}
+  .g2,.g3{grid-template-columns:1fr}
+  .cw-time{font-size:44px}
+  .content{padding:16px}
+}
+@media print{.sb,.topbar,.punch-grid,.btn,button,.toast{display:none!important}.main{margin-left:0}}
 </style>
 </head>
 <body>
-<div class="app">
 
-<!-- ===== CONFIGURAÇÃO INICIAL ===== -->
-<div id="config-screen" class="screen active">
-  <div class="content">
-    <div class="config-brand">
-      <i class="ti ti-clock logo-icon"></i>
-      <h2>PontoHora</h2>
-      <p>Configure o repositório GitHub para salvar os dados</p>
+<!-- LOGIN / CONFIG -->
+<div id="login-screen">
+  <div class="lc">
+    <div class="lc-logo">
+      <div class="lc-logo-mark">&#9201;</div>
+      <h1>PontoHora Pro</h1>
+      <p>Sistema de Controle de Jornada</p>
     </div>
 
-    <div class="card">
-      <div class="card-title">Configuração do GitHub</div>
-      <div id="config-msg"></div>
-      <div class="field">
-        <label>Usuário GitHub</label>
-        <input type="text" id="cfg-user" placeholder="seu-usuario">
+    <!-- TELA CONFIG GITHUB -->
+    <div id="cfg-screen">
+      <div class="cfg-card">
+        <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:16px">&#9881; Conectar ao GitHub</div>
+        <div id="cfg-msg"></div>
+        <div class="fg">
+          <label>Usuário GitHub</label>
+          <input id="cfg-user" placeholder="waldeciramos" autocomplete="off">
+        </div>
+        <div class="fg">
+          <label>Nome do repositório</label>
+          <input id="cfg-repo" placeholder="pontohora" autocomplete="off">
+        </div>
+        <div class="fg">
+          <label>Personal Access Token
+            <a href="https://github.com/settings/tokens/new?scopes=repo&description=PontoHora" target="_blank" style="color:#93c5fd;font-weight:400;margin-left:6px;font-size:11px">&#8599; Gerar token</a>
+          </label>
+          <input type="password" id="cfg-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
+        </div>
+        <button class="btn-login" id="btn-salvar-cfg" onclick="salvarConfig()">Salvar e conectar</button>
+        <div class="cfg-steps" style="margin-top:18px">
+          <div class="cfg-step"><div class="cfg-step-num">1</div><div>Crie um repositório <strong style="color:#fff">público</strong> no GitHub e ative o <strong style="color:#fff">GitHub Pages</strong> (Settings &#8594; Pages &#8594; Branch: main)</div></div>
+          <div class="cfg-step"><div class="cfg-step-num">2</div><div>Clique em <a href="https://github.com/settings/tokens/new?scopes=repo&description=PontoHora" target="_blank" class="step-link">Gerar token</a>, marque o escopo <strong style="color:#fff">repo</strong> e copie o token gerado</div></div>
+          <div class="cfg-step"><div class="cfg-step-num">3</div><div>Preencha os campos acima e clique em <strong style="color:#fff">Salvar e conectar</strong></div></div>
+        </div>
       </div>
-      <div class="field">
-        <label>Nome do repositório</label>
-        <input type="text" id="cfg-repo" placeholder="pontohora">
-      </div>
-      <div class="field">
-        <label>Personal Access Token
-          <a href="https://github.com/settings/tokens/new?scopes=repo&description=PontoHora" target="_blank"
-             style="color:var(--blue-tx);font-weight:400;margin-left:6px;font-size:11px">
-            <i class="ti ti-external-link" style="font-size:11px"></i> Gerar token
-          </a>
-        </label>
-        <input type="password" id="cfg-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
-      </div>
-      <button class="btn btn-dark btn-full" onclick="salvarConfig()">
-        <i class="ti ti-check"></i> Salvar e conectar
-      </button>
     </div>
 
-    <div class="card">
-      <div class="card-title">Como configurar</div>
-      <div class="step"><div class="step-num">1</div><div>Crie um repositório <strong>público</strong> no GitHub chamado <code>pontohora</code> e ative o <strong>GitHub Pages</strong> (Settings → Pages → Branch: main)</div></div>
-      <div class="step"><div class="step-num">2</div><div>Clique em <strong>"Gerar token"</strong> acima. Marque o escopo <code>repo</code> e crie o token.</div></div>
-      <div class="step"><div class="step-num">3</div><div>Preencha os campos acima com seu usuário, nome do repositório e o token gerado.</div></div>
-      <div class="step"><div class="step-num">4</div><div>Clique em <strong>Salvar e conectar</strong>. Os arquivos <code>usuarios.json</code> e <code>registros.json</code> serão criados automaticamente no repositório.</div></div>
+    <!-- TELA LOGIN -->
+    <div id="lform-screen" style="display:none">
+      <div class="lc-card">
+        <div id="lerr" style="display:none" class="err-msg"></div>
+        <div id="lform">
+          <div class="fg"><label>E-mail</label><input id="lu" type="email" placeholder="seu@email.com" autocomplete="email"></div>
+          <div class="fg"><label>Senha</label><input type="password" id="lp" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()"></div>
+          <button class="btn-login" id="btn-login" onclick="login()">Entrar no sistema</button>
+          <div class="lc-links">
+            <button class="link-btn" onclick="showReg()">Primeiro acesso? Cadastre-se</button>
+          </div>
+        </div>
+        <div id="rform" style="display:none">
+          <div class="fg"><label>Nome completo</label><input id="rn" placeholder="Seu nome completo"></div>
+          <div class="fg"><label>E-mail</label><input type="email" id="re" placeholder="seu@email.com"></div>
+          <div class="fg"><label>Senha</label><input type="password" id="rp" placeholder="minimo 4 caracteres"></div>
+          <div class="fg"><label>Tipo de contrato</label>
+            <select id="rt"><option value="horista">Horista</option><option value="mensalista">Mensalista</option></select>
+          </div>
+          <div class="fg"><label>Setor / Empresa</label><input id="rs" placeholder="opcional"></div>
+          <button class="btn-login" id="btn-reg" onclick="registrar()">Criar conta</button>
+          <div class="lc-links"><button class="link-btn" onclick="showLogin()">Ja tenho conta</button></div>
+        </div>
+      </div>
+      <p style="text-align:center;color:rgba(255,255,255,.2);font-size:11px;margin-top:14px;cursor:pointer" onclick="showCfg()">
+        &#9881; Alterar configuracao do GitHub
+      </p>
     </div>
   </div>
 </div>
 
-<!-- ===== LOGIN ===== -->
-<div id="login-screen" class="screen">
-  <div class="content">
-    <div class="login-brand">
-      <i class="ti ti-clock logo-icon"></i>
-      <h2>PontoHora</h2>
-      <p id="login-repo-label">—</p>
+<!-- APP -->
+<div id="app-screen">
+<div class="layout">
+
+<nav class="sb" id="sb">
+  <div class="sb-brand">
+    <div class="sb-mark">&#9201;</div>
+    <h2>PontoHora Pro</h2>
+    <small>GitHub Edition</small>
+  </div>
+  <div class="sb-nav">
+    <div class="sb-sec">Principal</div>
+    <button class="ni on" onclick="pg('ponto',this)"><span class="ico">&#128336;</span>Ponto do Dia</button>
+    <button class="ni" onclick="pg('historico',this)"><span class="ico">&#128197;</span>Historico</button>
+    <div class="sb-sec">Financeiro</div>
+    <button class="ni" onclick="pg('salario',this)"><span class="ico">&#128176;</span>Salario</button>
+    <button class="ni" onclick="pg('simulador',this)"><span class="ico">&#129518;</span>Simulador</button>
+    <div class="sb-sec">Gestao</div>
+    <button class="ni" onclick="pg('funcionarios',this)"><span class="ico">&#128101;</span>Funcionarios</button>
+    <button class="ni" onclick="pg('config',this)"><span class="ico">&#9881;</span>Configuracoes</button>
+  </div>
+  <div class="sb-foot">
+    <div class="sb-user">
+      <div class="av" id="av">W</div>
+      <div><div class="sb-uname" id="uname">-</div><div class="sb-urole" id="urole">-</div></div>
     </div>
-    <div class="card">
-      <div id="login-msg"></div>
-      <div class="field">
-        <label>E-mail</label>
-        <input type="email" id="login-email" placeholder="seu@email.com">
-      </div>
-      <div class="field">
-        <label>Senha</label>
-        <input type="password" id="login-senha" placeholder="••••••" onkeydown="if(event.key==='Enter')fazerLogin()">
-      </div>
-      <button class="btn btn-dark btn-full" id="btn-login" onclick="fazerLogin()">
-        <i class="ti ti-login"></i> Entrar
-      </button>
-      <button class="btn btn-full" onclick="irPara('cadastro-screen')">Criar conta</button>
-    </div>
-    <p style="text-align:center;font-size:12px;color:var(--text3);margin-top:8px;cursor:pointer" onclick="irPara('config-screen')">
-      <i class="ti ti-settings" style="font-size:13px;vertical-align:-2px"></i> Alterar configuração do GitHub
-    </p>
+    <button class="btn-sair" onclick="logout()">Sair do sistema</button>
+  </div>
+</nav>
+
+<div class="main">
+<div class="topbar">
+  <div class="tb-left">
+    <button class="burger" onclick="toggleSB()">&#9776;</button>
+    <div><div class="tb-title" id="tbtitle">Ponto do Dia</div><div class="tb-sub" id="tbsub">Controle de jornada</div></div>
+  </div>
+  <div class="tb-right">
+    <span class="tb-date" id="tbdate">-</span>
+    <div class="gh-status" id="ghstatus"><div class="gh-dot" id="ghdot"></div><span id="ghtxt">-</span></div>
+    <button class="dm-btn" id="dm-btn" onclick="toggleDark()" title="Modo escuro"></button>
   </div>
 </div>
 
-<!-- ===== CADASTRO ===== -->
-<div id="cadastro-screen" class="screen">
-  <div class="topbar">
-    <button class="btn btn-sm" onclick="irPara('login-screen')"><i class="ti ti-arrow-left"></i> Voltar</button>
-    <h1>Nova conta</h1>
-    <div style="width:70px"></div>
+<div class="content">
+
+<!-- PONTO -->
+<div class="page on" id="page-ponto">
+  <div class="cw">
+    <div class="cw-top">
+      <div class="cw-date" id="cwdate">-</div>
+      <div class="cw-badge" id="cwperiod">-</div>
+    </div>
+    <div class="cw-time" id="cwtime">--:--:--</div>
+    <div class="cw-status" id="cwstatus">Aguardando primeiro registro</div>
+    <div class="cw-bar-wrap">
+      <div class="cw-bar-lbl"><span id="barqtd">0h</span><span id="barpct">0%</span><span id="barmeta">120h meta</span></div>
+      <div class="cw-bar-track"><div class="cw-bar-fill" id="barfill" style="width:0%"></div></div>
+    </div>
+    <div class="punch-grid">
+      <button class="pb e" id="bE" onclick="bater('E')">&#9654; Entrada</button>
+      <button class="pb p" id="bPI" onclick="bater('PI')">&#9646; Inicio Pausa</button>
+      <button class="pb p" id="bPV" onclick="bater('PV')">&#9654; Volta Pausa</button>
+      <button class="pb s" id="bS" onclick="bater('S')">&#9632; Saida</button>
+    </div>
   </div>
-  <div class="content">
-    <div id="cad-msg"></div>
-    <div class="field-row">
-      <div class="field"><label>Nome completo</label><input type="text" id="cad-nome" placeholder="João Silva"></div>
-      <div class="field"><label>CPF</label><input type="text" id="cad-cpf" placeholder="000.000.000-00" maxlength="14"></div>
+
+  <div id="alertbox"></div>
+
+  <div class="stats">
+    <div class="si"><div class="sv" id="shoje">0h</div><div class="sl">&#9200; Hoje</div></div>
+    <div class="si g"><div class="sv" id="speriodo">0h</div><div class="sl">&#128198; No Periodo</div></div>
+    <div class="si a"><div class="sv" id="sfaltam">120h</div><div class="sl">&#127919; Faltam</div></div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><span class="ct">Registros de Hoje</span><span class="badge b" id="hoje-count">0</span></div>
+    <div id="regs-hoje"></div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><span class="ct">Adicionar / Corrigir Ponto Manual</span></div>
+    <div class="g2">
+      <div class="fr"><label>Data</label><input type="date" id="m-data"></div>
+      <div class="fr"><label>Hora</label><input type="time" id="m-hora"></div>
     </div>
-    <div class="field-row">
-      <div class="field"><label>Cargo</label><input type="text" id="cad-cargo" placeholder="Analista..."></div>
-      <div class="field"><label>Departamento</label><input type="text" id="cad-depto" placeholder="TI, RH..."></div>
+    <div class="fr"><label>Tipo</label>
+      <select id="m-tipo">
+        <option value="E">Entrada</option>
+        <option value="PI">Inicio Pausa</option>
+        <option value="PV">Volta Pausa</option>
+        <option value="S">Saida</option>
+      </select>
     </div>
-    <div class="field"><label>E-mail</label><input type="email" id="cad-email" placeholder="seu@email.com"></div>
-    <div class="field-row">
-      <div class="field"><label>Senha</label><input type="password" id="cad-senha" placeholder="mín. 4 chars"></div>
-      <div class="field"><label>Confirmar</label><input type="password" id="cad-senha2" placeholder="repita"></div>
-    </div>
-    <button class="btn btn-dark btn-full" id="btn-cadastrar" onclick="cadastrar()">
-      <i class="ti ti-user-plus"></i> Criar conta
-    </button>
+    <button class="btn bl" id="btn-manual" onclick="addManual()">+ Adicionar</button>
   </div>
 </div>
 
-<!-- ===== PONTO ===== -->
-<div id="ponto-screen" class="screen">
-  <div class="topbar">
-    <div style="display:flex;align-items:center;gap:10px">
-      <div class="avatar" id="av-iniciais">--</div>
-      <div>
-        <div style="font-size:14px;font-weight:600" id="av-nome">--</div>
-        <div style="font-size:11px;color:var(--text2)" id="av-cargo">--</div>
-      </div>
-    </div>
-    <div style="display:flex;align-items:center;gap:8px">
-      <span id="status-dot" title="Status da conexão"></span>
-      <button class="btn btn-sm" onclick="sair()"><i class="ti ti-logout"></i></button>
-    </div>
+<!-- HISTORICO -->
+<div class="page" id="page-historico">
+  <div class="ph"><h2>Historico de Ponto</h2><p id="hist-lbl">Periodo: -</p></div>
+  <div class="stats">
+    <div class="si"><div class="sv" id="htotal">0h</div><div class="sl">Total Periodo</div></div>
+    <div class="si g"><div class="sv" id="hdias">0</div><div class="sl">Dias Trabalhados</div></div>
+    <div class="si a"><div class="sv" id="hmedia">0h</div><div class="sl">Media/Dia</div></div>
   </div>
-  <div class="content">
-    <div class="clock-wrap">
-      <div class="clock-time" id="relogio">--:--:--</div>
-      <div class="clock-date" id="data-hoje">--</div>
-    </div>
-    <div id="ponto-msg"></div>
-    <div class="ponto-grid">
-      <div class="ponto-card" id="pc-entrada" onclick="baterPonto('entrada')">
-        <i class="ti ti-login pc-icon" style="color:#3b6d11"></i>
-        <div class="pc-label">Entrada</div>
-        <div class="pc-hora" id="ph-entrada">—</div>
-      </div>
-      <div class="ponto-card" id="pc-almoco_ini" onclick="baterPonto('almoco_ini')">
-        <i class="ti ti-coffee pc-icon" style="color:#854f0b"></i>
-        <div class="pc-label">Início almoço</div>
-        <div class="pc-hora" id="ph-almoco_ini">—</div>
-      </div>
-      <div class="ponto-card" id="pc-almoco_fim" onclick="baterPonto('almoco_fim')">
-        <i class="ti ti-coffee-off pc-icon" style="color:#0f6e56"></i>
-        <div class="pc-label">Fim almoço</div>
-        <div class="pc-hora" id="ph-almoco_fim">—</div>
-      </div>
-      <div class="ponto-card" id="pc-saida" onclick="baterPonto('saida')">
-        <i class="ti ti-logout pc-icon" style="color:#a32d2d"></i>
-        <div class="pc-label">Saída</div>
-        <div class="pc-hora" id="ph-saida">—</div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title">Registros de hoje</div>
-      <div id="hoje-lista"><p style="font-size:13px;color:var(--text3)">Nenhum registro ainda.</p></div>
-    </div>
+  <div class="card"><div class="ch"><span class="ct">Dias do Periodo</span></div><div id="hist-list"></div></div>
+  <div class="btn-row mt16">
+    <button class="btn bg" onclick="fecharPeriodo()">&#128274; Fechar Periodo (dia 26)</button>
+    <button class="btn bo" onclick="gerarRelatorio()">&#128202; Relatorio do Mes</button>
+    <button class="btn bo" onclick="modalRelPeriodo()">&#128203; Relatorio por Periodo</button>
   </div>
-  <nav class="nav">
-    <button class="nav-btn active" onclick="showTab('ponto')"><i class="ti ti-clock"></i>Ponto</button>
-    <button class="nav-btn" onclick="showTab('historico')"><i class="ti ti-history"></i>Histórico</button>
-    <button class="nav-btn" onclick="showTab('perfil')"><i class="ti ti-user"></i>Perfil</button>
-  </nav>
+  <div class="card mt24"><div class="ch"><span class="ct">Faturas / Periodos Fechados</span></div><div id="faturas-list"></div></div>
 </div>
 
-<!-- ===== HISTÓRICO ===== -->
-<div id="historico-screen" class="screen">
-  <div class="topbar">
-    <h1>Histórico</h1>
-    <a id="link-registros" href="#" target="_blank" class="btn btn-sm">
-      <i class="ti ti-brand-github"></i> Ver JSON
-    </a>
-  </div>
-  <div class="content">
-    <div class="resumo-grid" id="resumo-cards"></div>
-    <div id="hist-lista"><p style="font-size:13px;color:var(--text3)">Carregando...</p></div>
-  </div>
-  <nav class="nav">
-    <button class="nav-btn" onclick="showTab('ponto')"><i class="ti ti-clock"></i>Ponto</button>
-    <button class="nav-btn active" onclick="showTab('historico')"><i class="ti ti-history"></i>Histórico</button>
-    <button class="nav-btn" onclick="showTab('perfil')"><i class="ti ti-user"></i>Perfil</button>
-  </nav>
+<!-- SALARIO -->
+<div class="page" id="page-salario">
+  <div class="ph"><h2>Configuracao Salarial</h2><p>Defina seus componentes de remuneracao</p></div>
+  <div class="card"><div class="ch"><span class="ct">Dados Salariais</span></div><div id="sal-form"></div></div>
+  <div class="card"><div class="ch"><span class="ct">Calculo do Periodo Atual</span></div><div id="sal-calc"></div></div>
 </div>
 
-<!-- ===== PERFIL ===== -->
-<div id="perfil-screen" class="screen">
-  <div class="topbar"><h1>Perfil</h1></div>
-  <div class="content">
-    <div class="card" id="perfil-card"></div>
-    <div class="card">
-      <div class="card-title">Repositório</div>
-      <div id="repo-info-perfil"></div>
-      <a id="link-repo" href="#" target="_blank" class="btn btn-full" style="margin-top:8px;text-decoration:none">
-        <i class="ti ti-brand-github"></i> Abrir repositório
-      </a>
-      <a id="link-usuarios" href="#" target="_blank" class="btn btn-full" style="text-decoration:none">
-        <i class="ti ti-file-text"></i> Ver usuarios.json
-      </a>
-      <a id="link-registros2" href="#" target="_blank" class="btn btn-full" style="text-decoration:none">
-        <i class="ti ti-file-text"></i> Ver registros.json
-      </a>
+<!-- SIMULADOR -->
+<div class="page" id="page-simulador">
+  <div class="ph"><h2>Simulador Salarial</h2><p>Simule quanto vai receber em diferentes cenarios</p></div>
+  <div class="card">
+    <div class="fr"><label>Horas simuladas</label><input type="number" id="sim-h" value="120" min="1" max="300" oninput="calcSim()"></div>
+    <div id="sim-res"></div>
+  </div>
+  <div class="card"><div class="ch"><span class="ct">Tabela Comparativa</span></div><div id="sim-tbl"></div></div>
+</div>
+
+<!-- FUNCIONARIOS -->
+<div class="page" id="page-funcionarios">
+  <div class="ph"><h2>Funcionarios</h2><p>Gerencie os usuarios cadastrados</p></div>
+  <div class="btn-row" style="margin-bottom:16px">
+    <button class="btn bl" onclick="modalCadFunc()">+ Novo Funcionario</button>
+  </div>
+  <div id="func-list"></div>
+</div>
+
+<!-- CONFIG -->
+<div class="page" id="page-config">
+  <div class="ph"><h2>Configuracoes</h2><p>Perfil e preferencias</p></div>
+  <div class="card"><div class="ch"><span class="ct">Meu Perfil</span></div><div id="cfg-perfil"></div></div>
+  <div class="card">
+    <div class="ch"><span class="ct">Repositorio GitHub</span></div>
+    <div id="cfg-repo-info"></div>
+    <div class="btn-row mt16">
+      <button class="btn bo" onclick="showCfg()">Reconfigurar GitHub</button>
+      <a id="link-gh-repo" href="#" target="_blank" class="btn bo" style="text-decoration:none">Abrir repositorio</a>
+      <a id="link-gh-reg" href="#" target="_blank" class="btn bo" style="text-decoration:none">Ver registros.json</a>
     </div>
-    <button class="btn btn-danger btn-full" onclick="sair()"><i class="ti ti-logout"></i> Sair da conta</button>
-    <button class="btn btn-full" onclick="irPara('config-screen')" style="margin-top:4px">
-      <i class="ti ti-settings"></i> Reconfigurar GitHub
-    </button>
   </div>
-  <nav class="nav">
-    <button class="nav-btn" onclick="showTab('ponto')"><i class="ti ti-clock"></i>Ponto</button>
-    <button class="nav-btn" onclick="showTab('historico')"><i class="ti ti-history"></i>Histórico</button>
-    <button class="nav-btn active" onclick="showTab('perfil')"><i class="ti ti-user"></i>Perfil</button>
-  </nav>
+  <div class="card">
+    <div class="ch"><span class="ct">Backup Local</span></div>
+    <div class="btn-row">
+      <button class="btn bo" onclick="exportarLocal()">Exportar JSON</button>
+      <button class="btn bo" onclick="document.getElementById('imp-file').click()">Importar JSON</button>
+    </div>
+    <input type="file" id="imp-file" accept=".json" style="display:none" onchange="importarLocal(this)">
+  </div>
 </div>
 
+</div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /layout -->
 </div><!-- /app -->
 
+<!-- RELATORIO -->
+<div id="modal-relatorio">
+  <div id="rel-conteudo"></div>
+</div>
+
+<!-- MODAL -->
+<div id="modal" class="mb" style="display:none" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modal-body"></div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="toast hide"></div>
+
 <script>
-// ─── CONFIG ───────────────────────────────────────────────────────────────────
-const CFG_KEY = 'ph_config';
-const USER_KEY = 'ph_session';
+// ═══════════════════════════════════════════
+//  GITHUB API
+// ═══════════════════════════════════════════
+const CFG_KEY = 'ph_ghcfg';
+const SES_KEY = 'ph_session';
 
-function getCfg() { try { return JSON.parse(localStorage.getItem(CFG_KEY)||'null'); } catch { return null; } }
-function saveCfg(c) { localStorage.setItem(CFG_KEY, JSON.stringify(c)); }
-function getSession() { try { return JSON.parse(localStorage.getItem(USER_KEY)||'null'); } catch { return null; } }
-function saveSession(u) { localStorage.setItem(USER_KEY, JSON.stringify(u)); }
-function clearSession() { localStorage.removeItem(USER_KEY); }
+function getCfg(){try{return JSON.parse(localStorage.getItem(CFG_KEY)||'null')}catch{return null}}
+function saveCfg(c){localStorage.setItem(CFG_KEY,JSON.stringify(c))}
+function getSes(){try{return JSON.parse(localStorage.getItem(SES_KEY)||'null')}catch{return null}}
+function saveSes(u){localStorage.setItem(SES_KEY,JSON.stringify(u))}
+function clearSes(){localStorage.removeItem(SES_KEY)}
 
-let CFG = getCfg();
-let USER = null;
-let _timer = null;
-// cache local dos JSONs para evitar múltiplas leituras
-let _cache = { usuarios: null, registros: null };
+let CFG=getCfg(), USER=null, _timer=null;
+let _cache={u:null,r:null}; // {data, sha}
 
-// ─── GITHUB API ───────────────────────────────────────────────────────────────
-function ghHeaders() {
-  return {
-    'Authorization': `token ${CFG.token}`,
-    'Content-Type': 'application/json',
-    'Accept': 'application/vnd.github+json'
-  };
+function ghH(){return{'Authorization':'token '+CFG.token,'Content-Type':'application/json','Accept':'application/vnd.github+json'}}
+function ghUrl(p){return`https://api.github.com/repos/${CFG.user}/${CFG.repo}/contents/${p}`}
+
+async function ghRead(path){
+  const r=await fetch(ghUrl(path),{headers:ghH()});
+  if(r.status===404)return{data:null,sha:null};
+  if(!r.ok)throw new Error('GitHub '+r.status);
+  const j=await r.json();
+  return{data:JSON.parse(atob(j.content.replace(/\n/g,''))),sha:j.sha};
 }
 
-function ghUrl(path) {
-  return `https://api.github.com/repos/${CFG.user}/${CFG.repo}/contents/${path}`;
-}
-
-async function ghRead(path) {
-  const r = await fetch(ghUrl(path), { headers: ghHeaders() });
-  if (r.status === 404) return { data: null, sha: null };
-  if (!r.ok) throw new Error(`GitHub read error: ${r.status}`);
-  const json = await r.json();
-  const data = JSON.parse(atob(json.content.replace(/\n/g, '')));
-  return { data, sha: json.sha };
-}
-
-async function ghWrite(path, data, sha, mensagem) {
-  const body = {
-    message: mensagem || `PontoHora: atualiza ${path}`,
-    content: btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2)))),
-  };
-  if (sha) body.sha = sha;
-  const r = await fetch(ghUrl(path), {
-    method: 'PUT',
-    headers: ghHeaders(),
-    body: JSON.stringify(body)
-  });
-  if (!r.ok) {
-    const err = await r.json();
-    throw new Error(err.message || `GitHub write error: ${r.status}`);
-  }
+async function ghWrite(path,data,sha,msg){
+  const body={message:msg||'PontoHora: atualiza '+path,content:btoa(unescape(encodeURIComponent(JSON.stringify(data,null,2))))};
+  if(sha)body.sha=sha;
+  const r=await fetch(ghUrl(path),{method:'PUT',headers:ghH(),body:JSON.stringify(body)});
+  if(!r.ok){const e=await r.json();throw new Error(e.message||'GitHub write '+r.status)}
   return await r.json();
 }
 
-async function lerUsuarios() {
-  if (_cache.usuarios) return _cache.usuarios;
-  const { data, sha } = await ghRead('usuarios.json');
-  _cache.usuarios = { data: data || [], sha };
-  return _cache.usuarios;
+async function lerUsuarios(force){
+  if(!force&&_cache.u)return _cache.u;
+  const res=await ghRead('usuarios.json');
+  _cache.u={data:res.data||[],sha:res.sha};
+  return _cache.u;
 }
 
-async function lerRegistros() {
-  if (_cache.registros) return _cache.registros;
-  const { data, sha } = await ghRead('registros.json');
-  _cache.registros = { data: data || [], sha };
-  return _cache.registros;
+async function lerRegistros(force){
+  if(!force&&_cache.r)return _cache.r;
+  const res=await ghRead('registros.json');
+  _cache.r={data:res.data||{},sha:res.sha};
+  return _cache.r;
 }
 
-async function gravarUsuarios(lista, sha, msg) {
-  const res = await ghWrite('usuarios.json', lista, sha, msg || 'PontoHora: atualiza usuarios');
-  _cache.usuarios = { data: lista, sha: res.content.sha };
+async function salvarUsuarios(lista,sha,msg){
+  const res=await ghWrite('usuarios.json',lista,sha,msg||'PontoHora: usuarios');
+  _cache.u={data:lista,sha:res.content.sha};
 }
 
-async function gravarRegistros(lista, sha, msg) {
-  const res = await ghWrite('registros.json', lista, sha, msg || 'PontoHora: atualiza registros');
-  _cache.registros = { data: lista, sha: res.content.sha };
+async function salvarRegistros(obj,sha,msg){
+  const res=await ghWrite('registros.json',obj,sha,msg||'PontoHora: registros');
+  _cache.r={data:obj,sha:res.content.sha};
 }
 
-// ─── NAVEGAÇÃO ────────────────────────────────────────────────────────────────
-function irPara(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+// ═══════════════════════════════════════════
+//  STATUS GH
+// ═══════════════════════════════════════════
+function setGhStatus(state,txt){
+  const dot=document.getElementById('ghdot'),el=document.getElementById('ghtxt');
+  dot.className='gh-dot'+(state==='ok'?' ok':state==='err'?' err':state==='saving'?' saving':'');
+  if(el)el.textContent=txt||'';
 }
 
-function showTab(tab) {
-  irPara(tab + '-screen');
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('#' + tab + '-screen .nav-btn').forEach((b, i) => {
-    const tabs = ['ponto','historico','perfil'];
-    if (tabs[i] === tab) b.classList.add('active');
-  });
-  if (tab === 'historico') renderHistorico();
-  if (tab === 'perfil') renderPerfil();
+// ═══════════════════════════════════════════
+//  CONFIG GITHUB
+// ═══════════════════════════════════════════
+function showCfg(){
+  document.getElementById('cfg-screen').style.display='block';
+  document.getElementById('lform-screen').style.display='none';
+  if(CFG){
+    document.getElementById('cfg-user').value=CFG.user||'';
+    document.getElementById('cfg-repo').value=CFG.repo||'';
+  }
 }
 
-// ─── MSG ─────────────────────────────────────────────────────────────────────
-function msg(elId, texto, tipo, dur, spin) {
-  const el = document.getElementById(elId);
-  const s = spin ? '<div class="spinner"></div>' : '';
-  el.innerHTML = `<div class="msg msg-${tipo}">${s}${texto}</div>`;
-  if (dur) setTimeout(() => { el.innerHTML = ''; }, dur);
-}
-function clearMsg(elId) { document.getElementById(elId).innerHTML = ''; }
-
-// ─── STATUS DOT ──────────────────────────────────────────────────────────────
-function setStatus(online) {
-  const el = document.getElementById('status-dot');
-  if (!el) return;
-  el.className = online ? 'online-dot' : 'offline-dot';
-  el.title = online ? 'Conectado ao GitHub' : 'Sem conexão';
-}
-
-// ─── CONFIG ───────────────────────────────────────────────────────────────────
-async function salvarConfig() {
-  const user = document.getElementById('cfg-user').value.trim();
-  const repo = document.getElementById('cfg-repo').value.trim();
-  const token = document.getElementById('cfg-token').value.trim();
-  if (!user || !repo || !token) return msg('config-msg', 'Preencha todos os campos.', 'err', 3000);
-  msg('config-msg', 'Conectando ao GitHub...', 'info', 0, true);
-  CFG = { user, repo, token };
-  try {
-    // testa token
-    const r = await fetch(`https://api.github.com/repos/${user}/${repo}`, { headers: ghHeaders() });
-    if (r.status === 404) {
-      clearMsg('config-msg');
-      return msg('config-msg', 'Repositório não encontrado. Verifique o usuário e nome do repositório.', 'err', 5000);
-    }
-    if (r.status === 401) {
-      clearMsg('config-msg');
-      return msg('config-msg', 'Token inválido ou sem permissão.', 'err', 5000);
-    }
-    // garante que os arquivos JSON existem
-    _cache = { usuarios: null, registros: null };
-    const u = await lerUsuarios();
-    if (u.sha === null) {
-      await gravarUsuarios([], null, 'PontoHora: cria usuarios.json');
-    }
-    const reg = await lerRegistros();
-    if (reg.sha === null) {
-      await gravarRegistros([], null, 'PontoHora: cria registros.json');
-    }
+async function salvarConfig(){
+  const user=document.getElementById('cfg-user').value.trim();
+  const repo=document.getElementById('cfg-repo').value.trim();
+  const token=document.getElementById('cfg-token').value.trim();
+  const msg=document.getElementById('cfg-msg');
+  if(!user||!repo||!token){msg.innerHTML='<div class="err-msg">Preencha todos os campos.</div>';return}
+  const btn=document.getElementById('btn-salvar-cfg');
+  btn.disabled=true;btn.textContent='Conectando...';
+  try{
+    const r=await fetch(`https://api.github.com/repos/${user}/${repo}`,{headers:{'Authorization':'token '+token}});
+    if(r.status===404){throw new Error('Repositorio nao encontrado. Verifique o usuario e nome.')}
+    if(r.status===401){throw new Error('Token invalido ou sem permissao.')}
+    CFG={user,repo,token};_cache={u:null,r:null};
+    // garante arquivos existem
+    const u=await lerUsuarios(true);
+    if(u.sha===null)await salvarUsuarios([],null,'PontoHora: cria usuarios.json');
+    const reg=await lerRegistros(true);
+    if(reg.sha===null)await salvarRegistros({},null,'PontoHora: cria registros.json');
     saveCfg(CFG);
-    clearMsg('config-msg');
-    atualizarLinksRepo();
-    irPara('login-screen');
-  } catch (e) {
-    clearMsg('config-msg');
-    msg('config-msg', 'Erro: ' + e.message, 'err', 6000);
+    msg.innerHTML='';
+    btn.disabled=false;btn.textContent='Salvar e conectar';
+    document.getElementById('cfg-screen').style.display='none';
+    document.getElementById('lform-screen').style.display='block';
+    atualizarLinksGH();
+  }catch(e){
+    msg.innerHTML=`<div class="err-msg">${e.message}</div>`;
+    btn.disabled=false;btn.textContent='Salvar e conectar';
   }
 }
 
-function atualizarLinksRepo() {
-  if (!CFG) return;
-  const base = `https://github.com/${CFG.user}/${CFG.repo}`;
-  const raw = `https://raw.githubusercontent.com/${CFG.user}/${CFG.repo}/main`;
-  const el = document.getElementById('login-repo-label');
-  if (el) el.textContent = `${CFG.user}/${CFG.repo}`;
-  const lr = document.getElementById('link-registros');
-  if (lr) lr.href = `${base}/blob/main/registros.json`;
-  const lr2 = document.getElementById('link-registros2');
-  if (lr2) lr2.href = `${base}/blob/main/registros.json`;
-  const lu = document.getElementById('link-usuarios');
-  if (lu) lu.href = `${base}/blob/main/usuarios.json`;
-  const lrepo = document.getElementById('link-repo');
-  if (lrepo) lrepo.href = base;
+function atualizarLinksGH(){
+  if(!CFG)return;
+  const base=`https://github.com/${CFG.user}/${CFG.repo}`;
+  const lr=document.getElementById('link-gh-repo');if(lr)lr.href=base;
+  const lreg=document.getElementById('link-gh-reg');if(lreg)lreg.href=`${base}/blob/main/registros.json`;
+  const ri=document.getElementById('cfg-repo-info');
+  if(ri)ri.innerHTML=`<div class="sr-row"><span class="d">Repositorio</span><span><strong>${CFG.user}/${CFG.repo}</strong></span></div>`;
 }
 
-// ─── CPF MASK ─────────────────────────────────────────────────────────────────
-document.getElementById('cad-cpf').addEventListener('input', function() {
-  let v = this.value.replace(/\D/g,'');
-  v = v.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2');
-  this.value = v;
-});
+// ═══════════════════════════════════════════
+//  LOGIN / CADASTRO
+// ═══════════════════════════════════════════
+function showReg(){document.getElementById('lform').style.display='none';document.getElementById('rform').style.display='block'}
+function showLogin(){document.getElementById('rform').style.display='none';document.getElementById('lform').style.display='block'}
 
-// ─── CADASTRO ─────────────────────────────────────────────────────────────────
-async function cadastrar() {
-  const nome = document.getElementById('cad-nome').value.trim();
-  const cpf = document.getElementById('cad-cpf').value.trim();
-  const cargo = document.getElementById('cad-cargo').value.trim();
-  const depto = document.getElementById('cad-depto').value.trim();
-  const email = document.getElementById('cad-email').value.trim().toLowerCase();
-  const senha = document.getElementById('cad-senha').value;
-  const senha2 = document.getElementById('cad-senha2').value;
-  if (!nome || !email || !senha) return msg('cad-msg','Preencha nome, e-mail e senha.','err',3000);
-  if (senha.length < 4) return msg('cad-msg','Senha mínima: 4 caracteres.','err',3000);
-  if (senha !== senha2) return msg('cad-msg','Senhas não conferem.','err',3000);
+function showErr(m){const el=document.getElementById('lerr');el.textContent=m;el.style.display='block';setTimeout(()=>el.style.display='none',4000)}
 
-  const btn = document.getElementById('btn-cadastrar');
-  btn.disabled = true;
-  msg('cad-msg','Salvando no GitHub...','info',0,true);
-  try {
-    _cache.usuarios = null;
-    const { data: usuarios, sha } = await lerUsuarios();
-    if (usuarios.find(u => u.email === email)) {
-      btn.disabled = false;
-      return msg('cad-msg','E-mail já cadastrado.','err',3000);
-    }
-    const novo = { id:'u'+Date.now(), nome, cpf, cargo, departamento:depto, email, senha,
-      criadoEm: new Date().toISOString(), admin: usuarios.length === 0 };
+async function registrar(){
+  const nome=document.getElementById('rn').value.trim();
+  const email=document.getElementById('re').value.trim().toLowerCase();
+  const senha=document.getElementById('rp').value;
+  const tipo=document.getElementById('rt').value;
+  const setor=document.getElementById('rs').value.trim();
+  if(!nome||!email||!senha){showErr('Nome, e-mail e senha sao obrigatorios.');return}
+  if(senha.length<4){showErr('Senha minima: 4 caracteres.');return}
+  const btn=document.getElementById('btn-reg');btn.disabled=true;btn.textContent='Salvando...';
+  try{
+    _cache.u=null;
+    const{data:usuarios,sha}=await lerUsuarios(true);
+    if(usuarios.find(u=>u.email===email)){showErr('E-mail ja cadastrado.');btn.disabled=false;btn.textContent='Criar conta';return}
+    const novo={id:'u'+Date.now(),nome,email,senha,tipo,setor,
+      empresa:'',registro:'',profissao:'',meta_horas:120,hora_entrada:'07:30',salario_base:0,
+      criadoEm:new Date().toISOString(),admin:usuarios.length===0};
     usuarios.push(novo);
-    await gravarUsuarios(usuarios, sha, `PontoHora: cadastro de ${nome}`);
-    clearMsg('cad-msg');
-    msg('cad-msg','Conta criada! Faça login.','ok',3000);
-    btn.disabled = false;
-    setTimeout(() => irPara('login-screen'), 1400);
-  } catch(e) {
-    btn.disabled = false;
-    msg('cad-msg','Erro ao salvar: '+e.message,'err',5000);
-  }
+    await salvarUsuarios(usuarios,sha,`PontoHora: cadastro de ${nome}`);
+    toast('Conta criada! Faca login.','s');
+    showLogin();
+    document.getElementById('lu').value=email;
+  }catch(e){showErr('Erro: '+e.message)}
+  btn.disabled=false;btn.textContent='Criar conta';
 }
 
-// ─── LOGIN ────────────────────────────────────────────────────────────────────
-async function fazerLogin() {
-  const email = document.getElementById('login-email').value.trim().toLowerCase();
-  const senha = document.getElementById('login-senha').value;
-  const btn = document.getElementById('btn-login');
-  btn.disabled = true;
-  msg('login-msg','Verificando...','info',0,true);
-  try {
-    _cache.usuarios = null;
-    const { data: usuarios } = await lerUsuarios();
-    const u = usuarios.find(u => u.email === email && u.senha === senha);
-    if (!u) {
-      btn.disabled = false;
-      return msg('login-msg','E-mail ou senha incorretos.','err',3000);
+async function login(){
+  const email=document.getElementById('lu').value.trim().toLowerCase();
+  const senha=document.getElementById('lp').value;
+  if(!email||!senha){showErr('Preencha e-mail e senha.');return}
+  const btn=document.getElementById('btn-login');btn.disabled=true;btn.textContent='Verificando...';
+  try{
+    _cache.u=null;
+    const{data:usuarios}=await lerUsuarios(true);
+    const u=usuarios.find(u=>u.email===email&&u.senha===senha);
+    if(!u){showErr('E-mail ou senha incorretos.');btn.disabled=false;btn.textContent='Entrar no sistema';return}
+    USER=u;saveSes(u);
+    btn.disabled=false;btn.textContent='Entrar no sistema';
+    entrarApp();
+  }catch(e){showErr('Erro de conexao: '+e.message);btn.disabled=false;btn.textContent='Entrar no sistema'}
+}
+
+function logout(){
+  if(!confirm('Sair do sistema?'))return;
+  USER=null;_cache={u:null,r:null};clearSes();clearInterval(_timer);
+  document.getElementById('app-screen').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('lp').value='';
+}
+
+// ═══════════════════════════════════════════
+//  APP
+// ═══════════════════════════════════════════
+async function entrarApp(){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app-screen').style.display='block';
+  document.getElementById('av').textContent=USER.nome.charAt(0).toUpperCase();
+  document.getElementById('uname').textContent=USER.nome;
+  document.getElementById('urole').textContent=USER.tipo||'horista';
+  document.getElementById('m-data').value=today();
+  if(document.body.classList.contains('dark'))document.getElementById('dm-btn').style.background='var(--blue)';
+  atualizarLinksGH();
+  await carregarTudo();
+  startClock();
+  renderPonto();
+  setGhStatus('ok',`${CFG.user}/${CFG.repo}`);
+}
+
+async function carregarTudo(){
+  try{
+    _cache.r=null;
+    await lerRegistros(true);
+    await carregarSalConfig();
+    updateBar();
+  }catch(e){setGhStatus('err','Sem conexao')}
+}
+
+// ═══════════════════════════════════════════
+//  UTEIS
+// ═══════════════════════════════════════════
+const pad=n=>String(n).padStart(2,'0');
+const now=()=>new Date();
+const today=()=>{const d=now();return`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`};
+const timeNow=()=>{const d=now();return`${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`};
+const t2m=t=>{const[h,m]=t.split(':').map(Number);return h*60+m};
+const fmtH=m=>{const h=Math.floor(Math.abs(m)/60),mn=Math.round(Math.abs(m)%60);return(m<0?'-':'')+`${h}h${mn>0?pad(mn)+'m':''}`};
+const fmtR=v=>'R$ '+Number(v).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+const minsHHMM=m=>{if(!m&&m!==0)return'00:00';const h=Math.floor(Math.abs(m)/60),mn=Math.round(Math.abs(m)%60);return(m<0?'-':'')+pad(h)+':'+pad(mn)};
+
+function periodoAtual(){
+  const d=now(),dia=d.getDate();let ini,fim;
+  if(dia>=26){ini=new Date(d.getFullYear(),d.getMonth(),26);fim=new Date(d.getFullYear(),d.getMonth()+1,26)}
+  else{ini=new Date(d.getFullYear(),d.getMonth()-1,26);fim=new Date(d.getFullYear(),d.getMonth(),26)}
+  const fmt=dt=>`${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}`;
+  return{ini:fmt(ini),fim:fmt(fim)};
+}
+function dateInPeriodo(ds){const{ini,fim}=periodoAtual();return ds>=ini&&ds<fim}
+function isWeekend(ds){const d=new Date(ds+'T12:00:00');return d.getDay()===0||d.getDay()===6}
+
+function calcMinutosDia(pontos){
+  if(!pontos||pontos.length<2)return 0;
+  let total=0,entrada=null;
+  const s=[...pontos].sort((a,b)=>a.hora.localeCompare(b.hora));
+  for(const p of s){
+    switch(p.tipo){
+      case'E':entrada=p.hora;break;
+      case'PI':if(entrada){total+=t2m(p.hora)-t2m(entrada);entrada=null}break;
+      case'PV':entrada=p.hora;break;
+      case'S':if(entrada){total+=t2m(p.hora)-t2m(entrada);entrada=null}break;
     }
-    USER = u;
-    saveSession(u);
-    btn.disabled = false;
-    clearMsg('login-msg');
-    iniciarApp();
-  } catch(e) {
-    btn.disabled = false;
-    msg('login-msg','Erro de conexão: '+e.message,'err',5000);
-    setStatus(false);
+  }
+  if(entrada)total+=t2m(timeNow().substring(0,5))-t2m(entrada.substring(0,5));
+  return Math.max(0,total);
+}
+
+// ═══════════════════════════════════════════
+//  CLOCK
+// ═══════════════════════════════════════════
+function startClock(){clearInterval(_timer);tick();_timer=setInterval(tick,1000)}
+function tick(){
+  const d=now();
+  const dias=['Domingo','Segunda-feira','Terca-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sabado'];
+  const mes=['janeiro','fevereiro','marco','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+  document.getElementById('cwdate').textContent=`${dias[d.getDay()]}, ${d.getDate()} de ${mes[d.getMonth()]}`;
+  document.getElementById('cwtime').textContent=`${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+  document.getElementById('tbdate').textContent=`${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`;
+  const{ini,fim}=periodoAtual();
+  const pi=ini.split('-'),pf=fim.split('-');
+  document.getElementById('cwperiod').textContent=`${pi[2]}/${pi[1]} -> ${pf[2]}/${pf[1]}/${pf[0]}`;
+  updateBar();checkAlerts();
+}
+
+// ═══════════════════════════════════════════
+//  PONTOS
+// ═══════════════════════════════════════════
+let CFG_SAL={};
+
+function getPontosHoje(){
+  const reg=_cache.r?.data||{};
+  return((reg[today()]||[]).filter(p=>p.userId===USER.id)).sort((a,b)=>a.hora.localeCompare(b.hora));
+}
+
+function totalMinutosPeriodo(){
+  const reg=_cache.r?.data||{};
+  let total=0;
+  for(const[data,pontos]of Object.entries(reg)){
+    if(dateInPeriodo(data)&&!isWeekend(data)){
+      const meus=pontos.filter(p=>p.userId===USER.id);
+      total+=calcMinutosDia(meus);
+    }
+  }
+  return total;
+}
+
+function updateBar(){
+  const meta=(CFG_SAL.meta_horas||120)*60;
+  const mins=totalMinutosPeriodo();
+  const hoje=calcMinutosDia(getPontosHoje());
+  const pct=Math.min(100,(mins/meta)*100);
+  document.getElementById('barfill').style.width=pct+'%';
+  document.getElementById('barqtd').textContent=fmtH(mins);
+  document.getElementById('barpct').textContent=pct.toFixed(1)+'%';
+  document.getElementById('barmeta').textContent=(CFG_SAL.meta_horas||120)+'h meta';
+  document.getElementById('shoje').textContent=fmtH(hoje);
+  document.getElementById('speriodo').textContent=fmtH(mins);
+  document.getElementById('sfaltam').textContent=fmtH(Math.max(0,meta-mins));
+}
+
+async function bater(tipo){
+  const btn=document.getElementById('b'+tipo);
+  if(btn.disabled)return;
+  btn.disabled=true;setGhStatus('saving','Salvando...');
+  try{
+    _cache.r=null;
+    const{data:reg,sha}=await lerRegistros(true);
+    const dataHj=today();
+    if(!reg[dataHj])reg[dataHj]=[];
+    if(reg[dataHj].find(p=>p.userId===USER.id&&p.tipo===tipo)){renderPonto();return}
+    const agora=new Date();
+    const registro={id:'r'+Date.now(),userId:USER.id,nomeUsuario:USER.nome,
+      data:dataHj,hora:agora.toLocaleTimeString('pt-BR',{hour12:false}),
+      timestamp:agora.toISOString(),tipo,manual:false};
+    reg[dataHj].push(registro);
+    await salvarRegistros(reg,sha,`PontoHora: ${USER.nome} - ${tipo} - ${registro.hora}`);
+    setGhStatus('ok',`${CFG.user}/${CFG.repo}`);
+    const msgs={E:'Entrada registrada!',PI:'Pausa iniciada!',PV:'Voltou da pausa!',S:'Saida registrada!'};
+    toast(msgs[tipo]||'Ponto registrado!','s');
+    renderPonto();updateBar();
+  }catch(e){
+    toast('Erro: '+e.message,'d');setGhStatus('err','Erro ao salvar');
+    btn.disabled=false;
   }
 }
 
-function iniciarApp() {
-  const ini = USER.nome.split(' ').slice(0,2).map(p=>p[0]).join('').toUpperCase();
-  document.getElementById('av-iniciais').textContent = ini;
-  document.getElementById('av-nome').textContent = USER.nome.split(' ')[0];
-  document.getElementById('av-cargo').textContent = USER.cargo || USER.departamento || '';
-  setStatus(true);
-  iniciarRelogio();
-  carregarPontoHoje();
-  atualizarLinksRepo();
-  irPara('ponto-screen');
+async function addManual(){
+  const data=document.getElementById('m-data').value;
+  const hora=document.getElementById('m-hora').value;
+  const tipo=document.getElementById('m-tipo').value;
+  if(!data||!hora){toast('Preencha data e hora.','d');return}
+  const btn=document.getElementById('btn-manual');btn.disabled=true;
+  setGhStatus('saving','Salvando...');
+  try{
+    _cache.r=null;
+    const{data:reg,sha}=await lerRegistros(true);
+    if(!reg[data])reg[data]=[];
+    const jaExiste=reg[data].find(p=>p.userId===USER.id&&p.tipo===tipo);
+    if(jaExiste){
+      toast('Ja existe esse tipo neste dia. Edite ou exclua.','d');
+      btn.disabled=false;return;
+    }
+    const registro={id:'r'+Date.now(),userId:USER.id,nomeUsuario:USER.nome,
+      data,hora:hora+':00',timestamp:new Date().toISOString(),tipo,manual:true};
+    reg[data].push(registro);
+    reg[data].sort((a,b)=>a.hora.localeCompare(b.hora));
+    await salvarRegistros(reg,sha,`PontoHora: ${USER.nome} - manual ${tipo} ${data}`);
+    setGhStatus('ok',`${CFG.user}/${CFG.repo}`);
+    toast('Ponto manual adicionado!','s');
+    renderPonto();
+    if(document.getElementById('page-historico').classList.contains('on'))renderHistorico();
+  }catch(e){toast('Erro: '+e.message,'d');setGhStatus('err','Erro')}
+  btn.disabled=false;
 }
 
-function sair() {
-  USER = null;
-  _cache = { usuarios: null, registros: null };
-  clearSession();
-  clearInterval(_timer);
-  document.getElementById('login-email').value = '';
-  document.getElementById('login-senha').value = '';
-  irPara('login-screen');
-}
-
-// ─── RELÓGIO ─────────────────────────────────────────────────────────────────
-function iniciarRelogio() {
-  clearInterval(_timer);
-  function tick() {
-    const n = new Date();
-    document.getElementById('relogio').textContent = n.toLocaleTimeString('pt-BR');
-    document.getElementById('data-hoje').textContent =
-      n.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-  }
-  tick(); _timer = setInterval(tick, 1000);
-}
-
-// ─── PONTO ────────────────────────────────────────────────────────────────────
-function hoje() { return new Date().toISOString().slice(0,10); }
-
-function regHoje(registros) {
-  return registros.filter(r => r.userId === USER.id && r.data === hoje());
-}
-
-async function carregarPontoHoje() {
-  try {
-    _cache.registros = null;
-    const { data: registros } = await lerRegistros();
-    renderBotoesPonto(regHoje(registros));
-  } catch(e) {
-    setStatus(false);
-  }
-}
-
-function renderBotoesPonto(reg) {
-  const tipos = ['entrada','almoco_ini','almoco_fim','saida'];
-  tipos.forEach(t => {
-    const card = document.getElementById('pc-' + t);
-    const horaEl = document.getElementById('ph-' + t);
-    const found = reg.find(r => r.tipo === t);
-    card.classList.remove('loading');
-    card.classList.toggle('done', !!found);
-    horaEl.textContent = found ? found.hora : '—';
-  });
-  const lista = document.getElementById('hoje-lista');
-  if (!reg.length) {
-    lista.innerHTML = '<p style="font-size:13px;color:var(--text3)">Nenhum registro ainda.</p>';
-    return;
-  }
-  const label = {entrada:'Entrada',almoco_ini:'Início almoço',almoco_fim:'Fim almoço',saida:'Saída'};
-  lista.innerHTML = reg.map(r => `
-    <div class="list-row">
-      <span class="badge b-${r.tipo}">${label[r.tipo]}</span>
-      <span style="font-size:15px;font-weight:700;font-variant-numeric:tabular-nums">${r.hora}</span>
+function renderPonto(){
+  const pontos=getPontosHoje();
+  const temE=pontos.some(p=>p.tipo==='E');
+  const temPI=pontos.some(p=>p.tipo==='PI');
+  const temPV=pontos.some(p=>p.tipo==='PV');
+  const temS=pontos.some(p=>p.tipo==='S');
+  const bE=document.getElementById('bE'),bPI=document.getElementById('bPI');
+  const bPV=document.getElementById('bPV'),bS=document.getElementById('bS');
+  if(bE)bE.disabled=temE;
+  if(bPI)bPI.disabled=!temE||temPI||temS;
+  if(bPV)bPV.disabled=!temPI||temPV||temS;
+  if(bS)bS.disabled=!temE||(temPI&&!temPV)||temS;
+  const cnt=document.getElementById('hoje-count');if(cnt)cnt.textContent=pontos.length+' regs';
+  const tipos={E:'Entrada',PI:'Inicio Pausa',PV:'Volta Pausa',S:'Saida'};
+  const el=document.getElementById('regs-hoje');if(!el)return;
+  if(!pontos.length){el.innerHTML='<div class="nd"><div class="nd-ico">&#128203;</div>Nenhum registro hoje</div>';return}
+  el.innerHTML=pontos.map(p=>`
+    <div class="pr">
+      <span class="pt ${p.tipo}">${tipos[p.tipo]}</span>
+      <span class="ph-time">${p.hora.substring(0,5)}</span>
+      ${p.manual?'<span class="badge a">manual</span>':'<span></span>'}
+      <button class="pe-btn" onclick="editarP('${p.id}','${today()}','${p.hora}','${p.tipo}')">&#9998; Editar</button>
     </div>`).join('');
 }
 
-async function baterPonto(tipo) {
-  if (!USER) return;
-  const card = document.getElementById('pc-' + tipo);
-  if (card.classList.contains('done') || card.classList.contains('loading')) return;
-
-  card.classList.add('loading');
-  msg('ponto-msg','Registrando...','info',0,true);
-
-  try {
-    _cache.registros = null;
-    const { data: registros, sha } = await lerRegistros();
-    if (registros.find(r => r.userId===USER.id && r.data===hoje() && r.tipo===tipo)) {
-      card.classList.remove('loading');
-      clearMsg('ponto-msg');
-      return;
-    }
-    const agora = new Date();
-    const reg = {
-      id: 'r'+Date.now(), userId: USER.id, nomeUsuario: USER.nome,
-      data: hoje(), hora: agora.toLocaleTimeString('pt-BR'),
-      timestamp: agora.toISOString(), tipo
-    };
-    registros.push(reg);
-    await gravarRegistros(registros, sha, `PontoHora: ${USER.nome} - ${tipo} - ${reg.hora}`);
-    setStatus(true);
-    const label = {entrada:'Entrada',almoco_ini:'Início de almoço',almoco_fim:'Fim de almoço',saida:'Saída'};
-    msg('ponto-msg', `${label[tipo]} registrada às <strong>${reg.hora}</strong>`, 'ok', 3000);
-    renderBotoesPonto(regHoje(registros));
-  } catch(e) {
-    card.classList.remove('loading');
-    msg('ponto-msg','Erro ao registrar: '+e.message,'err',5000);
-    setStatus(false);
-  }
+function editarP(id,data,hora,tipo){
+  document.getElementById('modal-body').innerHTML=`
+    <h3>&#9998; Editar Registro</h3>
+    <div class="fr"><label>Hora</label><input type="time" id="eh" value="${hora.substring(0,5)}"></div>
+    <div class="fr"><label>Tipo</label>
+      <select id="et">
+        <option value="E" ${tipo==='E'?'selected':''}>Entrada</option>
+        <option value="PI" ${tipo==='PI'?'selected':''}>Inicio Pausa</option>
+        <option value="PV" ${tipo==='PV'?'selected':''}>Volta Pausa</option>
+        <option value="S" ${tipo==='S'?'selected':''}>Saida</option>
+      </select></div>
+    <div class="btn-row">
+      <button class="btn bl" onclick="salvarEdit('${id}','${data}')">Salvar</button>
+      <button class="btn br" onclick="deletarP('${id}','${data}')">&#128465; Excluir</button>
+      <button class="btn bo" onclick="closeModal()">Cancelar</button>
+    </div>`;
+  document.getElementById('modal').style.display='flex';
 }
 
-// ─── HISTÓRICO ────────────────────────────────────────────────────────────────
-async function renderHistorico() {
-  document.getElementById('hist-lista').innerHTML = '<p style="font-size:13px;color:var(--text3)">Carregando...</p>';
-  try {
-    _cache.registros = null;
-    const { data: registros } = await lerRegistros();
-    const meus = registros.filter(r => r.userId === USER.id)
-      .sort((a,b) => b.timestamp.localeCompare(a.timestamp));
-    const totalDias = [...new Set(meus.map(r=>r.data))].length;
-    document.getElementById('resumo-cards').innerHTML = `
-      <div class="resumo-card"><div class="rc-label">Dias registrados</div><div class="rc-val">${totalDias}</div></div>
-      <div class="resumo-card"><div class="rc-label">Total de batidas</div><div class="rc-val">${meus.length}</div></div>`;
-    if (!meus.length) {
-      document.getElementById('hist-lista').innerHTML = '<p style="font-size:13px;color:var(--text3)">Nenhum registro ainda.</p>';
-      return;
-    }
-    const label = {entrada:'Entrada',almoco_ini:'Início almoço',almoco_fim:'Fim almoço',saida:'Saída'};
-    let html = '', diaAtual = '';
-    meus.forEach(r => {
-      if (r.data !== diaAtual) {
-        diaAtual = r.data;
-        const [y,m,d] = r.data.split('-');
-        html += `<div class="dia-header">${d}/${m}/${y}</div>`;
-      }
-      html += `<div class="list-row">
-        <span class="badge b-${r.tipo}">${label[r.tipo]}</span>
-        <span style="font-size:15px;font-weight:700;font-variant-numeric:tabular-nums">${r.hora}</span>
-      </div>`;
-    });
-    document.getElementById('hist-lista').innerHTML = html;
-  } catch(e) {
-    document.getElementById('hist-lista').innerHTML = `<p style="font-size:13px;color:var(--red-tx)">Erro ao carregar: ${e.message}</p>`;
-    setStatus(false);
-  }
+async function salvarEdit(id,data){
+  const hora=document.getElementById('eh').value;
+  const tipo=document.getElementById('et').value;
+  if(!hora){toast('Informe a hora.','d');return}
+  setGhStatus('saving','Salvando...');
+  try{
+    _cache.r=null;
+    const{data:reg,sha}=await lerRegistros(true);
+    if(!reg[data])reg[data]=[];
+    const idx=reg[data].findIndex(p=>p.id===id&&p.userId===USER.id);
+    if(idx>=0){reg[data][idx].hora=hora+':00';reg[data][idx].tipo=tipo;reg[data][idx].manual=true}
+    reg[data].sort((a,b)=>a.hora.localeCompare(b.hora));
+    await salvarRegistros(reg,sha,`PontoHora: ${USER.nome} - edita ${tipo} ${data}`);
+    setGhStatus('ok',`${CFG.user}/${CFG.repo}`);
+    closeModal();renderPonto();
+    if(document.getElementById('page-historico').classList.contains('on'))renderHistorico();
+    toast('Registro atualizado!','s');
+  }catch(e){toast('Erro: '+e.message,'d');setGhStatus('err','Erro')}
 }
 
-// ─── PERFIL ───────────────────────────────────────────────────────────────────
-async function renderPerfil() {
-  const u = USER;
-  const ini = u.nome.split(' ').slice(0,2).map(p=>p[0]).join('').toUpperCase();
-  let totalReg = 0;
-  try {
-    const { data: registros } = await lerRegistros();
-    totalReg = registros.filter(r => r.userId === u.id).length;
-  } catch {}
-  document.getElementById('perfil-card').innerHTML = `
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
-      <div class="avatar" style="width:50px;height:50px;font-size:16px">${ini}</div>
+async function deletarP(id,data){
+  if(!confirm('Excluir este registro?'))return;
+  setGhStatus('saving','Salvando...');
+  try{
+    _cache.r=null;
+    const{data:reg,sha}=await lerRegistros(true);
+    if(reg[data])reg[data]=reg[data].filter(p=>!(p.id===id&&p.userId===USER.id));
+    await salvarRegistros(reg,sha,`PontoHora: ${USER.nome} - remove ${data}`);
+    setGhStatus('ok',`${CFG.user}/${CFG.repo}`);
+    closeModal();renderPonto();
+    if(document.getElementById('page-historico').classList.contains('on'))renderHistorico();
+    toast('Registro excluido.');
+  }catch(e){toast('Erro: '+e.message,'d');setGhStatus('err','Erro')}
+}
+
+// ═══════════════════════════════════════════
+//  ALERTAS VISUAIS
+// ═══════════════════════════════════════════
+function checkAlerts(){
+  const pontos=getPontosHoje();
+  const abox=document.getElementById('alertbox');
+  const status=document.getElementById('cwstatus');
+  if(!abox)return;
+  if(!pontos.length){abox.innerHTML='';if(status)status.textContent='Aguardando primeiro registro do dia';return}
+  const entry=pontos.find(p=>p.tipo==='E');
+  const pausaI=pontos.find(p=>p.tipo==='PI');
+  const pausaV=pontos.find(p=>p.tipo==='PV');
+  const saida=pontos.find(p=>p.tipo==='S');
+  if(saida){abox.innerHTML='';if(status)status.textContent=`Jornada encerrada as ${saida.hora.substring(0,5)} - Total: ${fmtH(calcMinutosDia(pontos))}`;return}
+  const agora=t2m(timeNow().substring(0,5));
+  const alerts=[];
+  const addMins=(h,m)=>{const[hh,mm]=h.split(':').map(Number);const t=hh*60+mm+m;return`${pad(Math.floor(t/60))}:${pad(t%60)}`};
+  if(entry&&!pausaI){
+    const trab=agora-t2m(entry.hora.substring(0,5));
+    if(status)status.textContent=`Trabalhando ha ${fmtH(trab)} desde ${entry.hora.substring(0,5)}`;
+    if(trab>=280)alerts.push({t:'w',m:`&#9200; Voce esta ha <strong>${fmtH(trab)}</strong> trabalhando - bata a pausa agora!`});
+  }
+  if(pausaI&&!pausaV){
+    const pausado=agora-t2m(pausaI.hora.substring(0,5));
+    if(status)status.textContent=`Em pausa ha ${fmtH(pausado)}`;
+    if(pausado>=20)alerts.push({t:'d',m:`&#128276; Pausa com <strong>${fmtH(pausado)}</strong> - voce deveria ter voltado!`});
+    else alerts.push({t:'i',m:`&#9646; Em pausa. Volte em <strong>${20-pausado} min</strong> (as ${addMins(pausaI.hora,20)}).`});
+  }
+  const mh=calcMinutosDia(pontos);
+  if(mh>=330&&mh<360)alerts.push({t:'s',m:`&#10003; <strong>${fmtH(mh)}</strong> trabalhadas - jornada ideal atingida! Pode bater saida.`});
+  if(mh>=360)alerts.push({t:'i',m:`&#8505; Ja sao <strong>${fmtH(mh)}</strong> hoje - maximo recomendado de 6h atingido.`});
+  abox.innerHTML=alerts.map(a=>`<div class="ab ${a.t}"><span>${a.m}</span></div>`).join('');
+}
+
+// ═══════════════════════════════════════════
+//  HISTORICO
+// ═══════════════════════════════════════════
+async function renderHistorico(){
+  const{ini,fim}=periodoAtual();
+  const pi=ini.split('-'),pf=fim.split('-');
+  const el=document.getElementById('hist-lbl');
+  if(el)el.textContent=`Periodo: ${pi[2]}/${pi[1]}/${pi[0]} -> ${pf[2]}/${pf[1]}/${pf[0]}`;
+  const reg=_cache.r?.data||{};
+  let dias=[],totalMins=0;
+  const cur=new Date(ini+'T12:00:00'),fimD=new Date(fim+'T12:00:00');
+  const dsem=['Dom','Seg','Ter','Qua','Qui','Sex','Sab'];
+  const mes=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+  while(cur<fimD&&cur<=now()){
+    const ds=`${cur.getFullYear()}-${pad(cur.getMonth()+1)}-${pad(cur.getDate())}`;
+    if(!isWeekend(ds)){
+      const pontos=(reg[ds]||[]).filter(p=>p.userId===USER.id);
+      const mins=calcMinutosDia(pontos);
+      dias.push({data:ds,pontos,mins});
+      totalMins+=mins;
+    }
+    cur.setDate(cur.getDate()+1);
+  }
+  const diasTrab=dias.filter(d=>d.mins>0).length;
+  const media=diasTrab>0?totalMins/diasTrab:0;
+  const ht=document.getElementById('htotal');if(ht)ht.textContent=fmtH(totalMins);
+  const hd=document.getElementById('hdias');if(hd)hd.textContent=diasTrab;
+  const hm=document.getElementById('hmedia');if(hm)hm.textContent=fmtH(Math.round(media));
+  const hl=document.getElementById('hist-list');
+  if(!hl)return;
+  if(!dias.length){hl.innerHTML='<div class="nd"><div class="nd-ico">&#128197;</div>Nenhum dia util ainda</div>';return}
+  hl.innerHTML=dias.slice().reverse().map(d=>{
+    const dd=new Date(d.data+'T12:00:00');
+    const ok=d.mins>=330,tem=d.mins>0;
+    return`<div class="dr">
       <div>
-        <div style="font-size:16px;font-weight:700">${u.nome} ${u.admin?'<span class="tag-admin">admin</span>':''}</div>
-        <div style="font-size:12px;color:var(--text2)">${u.email}</div>
+        <div class="dd">${dsem[dd.getDay()]}, ${pad(dd.getDate())} ${mes[dd.getMonth()]}</div>
+        <div class="ds">${d.pontos.length} registros</div>
+      </div>
+      <div class="dh ${tem?(ok?'ok':'lo'):''}">${tem?fmtH(d.mins):'--'}</div>
+      <button class="btn bo btn-sm" onclick="verDia('${d.data}')">Ver</button>
+    </div>`;
+  }).join('');
+  renderFaturas();
+}
+
+function verDia(data){
+  const reg=_cache.r?.data||{};
+  const pontos=((reg[data]||[]).filter(p=>p.userId===USER.id)).sort((a,b)=>a.hora.localeCompare(b.hora));
+  const tipos={E:'Entrada',PI:'Inicio Pausa',PV:'Volta Pausa',S:'Saida'};
+  const dd=new Date(data+'T12:00:00');
+  const dsem=['Domingo','Segunda','Terca','Quarta','Quinta','Sexta','Sabado'];
+  const mes=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+  const mins=calcMinutosDia(pontos);
+  document.getElementById('modal-body').innerHTML=`
+    <h3>${dsem[dd.getDay()]}, ${pad(dd.getDate())} de ${mes[dd.getMonth()]}</h3>
+    <div class="ab ${mins>=330?'s':'i'}" style="margin-bottom:14px">Total: <strong>${fmtH(mins)}</strong> ${mins>=330?'&#10003;':'&#9888;'}</div>
+    ${pontos.map(p=>`
+      <div class="pr">
+        <span class="pt ${p.tipo}">${tipos[p.tipo]}</span>
+        <span class="ph-time">${p.hora.substring(0,5)}</span>
+        ${p.manual?'<span class="badge a">manual</span>':'<span></span>'}
+        <button class="pe-btn" onclick="editarP('${p.id}','${data}','${p.hora}','${p.tipo}')">&#9998; Editar</button>
+      </div>`).join('')}
+    ${!pontos.length?'<div class="nd">Nenhum registro</div>':''}
+    <div style="margin-top:14px"><button class="btn bo" onclick="closeModal()">Fechar</button></div>`;
+  document.getElementById('modal').style.display='flex';
+}
+
+// ═══════════════════════════════════════════
+//  FATURAS
+// ═══════════════════════════════════════════
+async function fecharPeriodo(){
+  const totalMins=totalMinutosPeriodo();
+  const{ini,fim}=periodoAtual();
+  if(!confirm(`Fechar periodo?\n${fmtH(totalMins)} trabalhadas\n\nContinuar?`))return;
+  setGhStatus('saving','Salvando...');
+  try{
+    _cache.u=null;
+    const{data:usuarios,sha}=await lerUsuarios(true);
+    const idx=usuarios.findIndex(u=>u.id===USER.id);
+    if(idx<0){toast('Usuario nao encontrado.','d');return}
+    if(!usuarios[idx].faturas)usuarios[idx].faturas=[];
+    const calc=calcularValorHoras(totalMins/60);
+    const fatura={id:'f'+Date.now(),periodo_ini:ini,periodo_fim:fim,total_minutos:totalMins,
+      bruto:calc.bruto,inss:calc.inss,liquido:calc.liquido,detalhes:calc,
+      fechado_em:new Date().toISOString()};
+    usuarios[idx].faturas.push(fatura);
+    await salvarUsuarios(usuarios,sha,`PontoHora: fatura ${USER.nome}`);
+    USER=usuarios[idx];saveSes(USER);
+    setGhStatus('ok',`${CFG.user}/${CFG.repo}`);
+    toast('Periodo fechado! Fatura gerada.','s');
+    renderFaturas();
+  }catch(e){toast('Erro: '+e.message,'d');setGhStatus('err','Erro')}
+}
+
+function renderFaturas(){
+  const faturas=(USER.faturas||[]).slice().reverse();
+  const el=document.getElementById('faturas-list');if(!el)return;
+  if(!faturas.length){el.innerHTML='<div class="nd"><div class="nd-ico">&#128196;</div>Nenhum periodo fechado</div>';return}
+  el.innerHTML=faturas.map(f=>`
+    <div class="fuc" onclick="verFatura('${f.id}')">
+      <div class="fua" style="border-radius:10px;font-size:14px">&#128196;</div>
+      <div>
+        <div class="fun">${f.periodo_ini.split('-').reverse().join('/')} -> ${f.periodo_fim.split('-').reverse().join('/')}</div>
+        <div class="fus">${fmtH(f.total_minutos)} &middot; fechado ${new Date(f.fechado_em).toLocaleDateString('pt-BR')}</div>
+      </div>
+      <div style="margin-left:auto;font-size:16px;font-weight:800;color:var(--green)">${fmtR(f.liquido)}</div>
+    </div>`).join('');
+}
+
+function verFatura(id){
+  const f=(USER.faturas||[]).find(x=>x.id===id);if(!f)return;
+  document.getElementById('modal-body').innerHTML=`
+    <h3>&#128196; Fatura de Pagamento</h3>
+    <div style="background:var(--ink);color:#fff;border-radius:12px;padding:16px;margin-bottom:16px">
+      <div style="font-size:15px;font-weight:700">${USER.nome}</div>
+      <div style="color:rgba(255,255,255,.5);font-size:12px;margin-top:3px">${f.periodo_ini.split('-').reverse().join('/')} -> ${f.periodo_fim.split('-').reverse().join('/')}</div>
+    </div>
+    <div class="sr-row"><span class="d">Horas trabalhadas</span><span><strong>${fmtH(f.total_minutos)}</strong></span></div>
+    ${renderLinhasSalario(f.detalhes)}
+    <div style="margin-top:16px" class="btn-row">
+      <button class="btn bl" onclick="window.print()">&#128424; Imprimir</button>
+      <button class="btn bo" onclick="closeModal()">Fechar</button>
+    </div>`;
+  document.getElementById('modal').style.display='flex';
+}
+
+// ═══════════════════════════════════════════
+//  SALARIO — motor de calculo
+// ═══════════════════════════════════════════
+const round2=v=>Math.round(v*100)/100;
+
+async function carregarSalConfig(){
+  const{data:usuarios}=await lerUsuarios();
+  const u=usuarios.find(x=>x.id===USER.id);
+  if(u?.salConfig)CFG_SAL={...u.salConfig,meta_horas:u.meta_horas||120};
+  else CFG_SAL={tipo:USER.tipo||'horista',salario_base:USER.salario_base||0,meta_horas:USER.meta_horas||120,inss_perc:9.5};
+}
+
+async function salvarSalConfig(cfg){
+  _cache.u=null;
+  const{data:usuarios,sha}=await lerUsuarios(true);
+  const idx=usuarios.findIndex(u=>u.id===USER.id);
+  if(idx<0)return;
+  usuarios[idx].salConfig=cfg;
+  usuarios[idx].meta_horas=cfg.meta_horas||120;
+  await salvarUsuarios(usuarios,sha,'PontoHora: config salarial '+USER.nome);
+  USER=usuarios[idx];saveSes(USER);
+  CFG_SAL=cfg;
+}
+
+function calcularValorHoras(horas){
+  const cfg=CFG_SAL,tipo=cfg.tipo||'horista',salRef=parseFloat(cfg.salario_base||0);
+  const vh=parseFloat(cfg.valor_hora_fixo||0)>0?parseFloat(cfg.valor_hora_fixo):(salRef>0?salRef/220:0);
+  const salBase=tipo==='mensalista'?salRef:round2(vh*horas);
+  const itens=[];let bruto=0;
+  itens.push({grupo:'venc',desc:tipo==='horista'?`Salario base (${horas.toFixed(0)}h x ${fmtR(vh)}/h)`:'Salario base mensal',val:salBase});
+  bruto+=salBase;
+  const add=(desc,base,perc)=>{if(perc>0){const v=round2(base*(perc/100));itens.push({grupo:'venc',desc:`${desc} (${perc}%)`,val:v});bruto+=v}};
+  add('Periculosidade',salBase,parseFloat(cfg.periculosidade||0));
+  add('Quebra de Caixa',salRef,parseFloat(cfg.quebra_caixa||0));
+  add('Adicional de Funcao',salBase,parseFloat(cfg.adic_funcao||0));
+  add('Dupla Funcao',salBase,parseFloat(cfg.adic_dupla_funcao||0));
+  add('Gratif. Confianca',salBase,parseFloat(cfg.conf_confianca||0));
+  const dsr=parseFloat(cfg.dsr_perc||0);
+  if(dsr>0){const v=round2(bruto*(dsr/100));itens.push({grupo:'venc',desc:`DSR (${dsr}%)`,val:v});bruto+=v}
+  const auxAcad=parseFloat(cfg.aux_academico||0);
+  if(auxAcad>0){itens.push({grupo:'venc',desc:'Auxilio Academico',val:auxAcad});bruto+=auxAcad}
+  const totalVenc=round2(bruto);
+  itens.push({grupo:'sub',desc:'Total de Vencimentos',val:totalVenc});
+  let descontos=0;
+  const inssPerc=parseFloat(cfg.inss_perc||9.5),inss=round2(bruto*(inssPerc/100));
+  itens.push({grupo:'desc',desc:`(-) INSS (${inssPerc}%)`,val:inss});descontos+=inss;
+  const irrfPerc=parseFloat(cfg.irrf_perc||0);
+  if(irrfPerc>0){const v=round2(bruto*(irrfPerc/100));itens.push({grupo:'desc',desc:`(-) IRRF (${irrfPerc}% estimado)`,val:v});descontos+=v}
+  const ps=parseFloat(cfg.plano_saude||0);if(ps>0){itens.push({grupo:'bene',desc:'(-) Plano Saude Titular',val:ps});descontos+=ps}
+  const po=parseFloat(cfg.plano_odonto||0);if(po>0){itens.push({grupo:'bene',desc:'(-) Plano Odontologico',val:po});descontos+=po}
+  const va=parseFloat(cfg.vale_alimentacao||0);if(va>0){itens.push({grupo:'bene',desc:'(+) Vale Alimentacao (creditado)',val:va,credito:true})}
+  const vt=parseFloat(cfg.vale_transporte||0),vtP=parseFloat(cfg.vale_transporte_perc||6);
+  if(vt>0){const vtD=round2(Math.min(vt,bruto*(vtP/100)));itens.push({grupo:'bene',desc:`(-) Vale Transporte (${vtP}%)`,val:vtD});descontos+=vtD}
+  const cg=parseFloat(cfg.custos_gestao||0);if(cg>0){itens.push({grupo:'bene',desc:'(-) Complem. Custos Gestao',val:cg});descontos+=cg}
+  const numDep=parseInt(cfg.num_dependentes||0),psDep=parseFloat(cfg.plano_saude_dep||0);
+  if(numDep>0&&psDep>0){const td=round2(psDep*numDep);itens.push({grupo:'bene',desc:`(-) Plano Saude Dependentes (${numDep}x)`,val:td});descontos+=td}
+  const liquido=round2(bruto-descontos);
+  itens.push({grupo:'liq',desc:'LIQUIDO A RECEBER',val:liquido});
+  const fgts=parseFloat(cfg.fgts_empresa||0);if(fgts>0){itens.push({grupo:'info',desc:'FGTS depositado pela empresa',val:fgts})}
+  return{tipo,horas,valor_hora:round2(vh),sal_base_ref:salRef,total_venc:totalVenc,bruto:round2(bruto),inss,descontos:round2(descontos),liquido,itens};
+}
+
+function renderLinhasSalario(c){
+  let h='';
+  (c.itens||[]).forEach(i=>{
+    const isDesc=i.grupo==='desc'||(i.grupo==='bene'&&i.desc.startsWith('(-)'));
+    const cor=i.credito?'color:var(--green)':i.grupo==='liq'?'color:var(--green)':isDesc?'color:var(--red)':'';
+    const fw=i.grupo==='sub'||i.grupo==='liq'?'font-weight:700':'';
+    const bt=i.grupo==='sub'||i.grupo==='liq'?'border-top:2px solid var(--line);margin-top:4px;':'';
+    const fs=i.grupo==='liq'?'font-size:16px;padding-top:10px;':'';
+    const pre=i.credito?'+':isDesc?'−':'';
+    h+=`<div class="sr-row" style="${bt}${fw}${fs}"><span ${i.grupo==='sub'||i.grupo==='liq'?'':' class="d"'}>${i.desc}</span><span style="${cor}">${pre}${fmtR(i.val)}</span></div>`;
+  });
+  return h;
+}
+
+function renderSalario(){
+  const cfg=CFG_SAL,isHorista=(cfg.tipo||'horista')==='horista';
+  const el=document.getElementById('sal-form');if(!el)return;
+  el.innerHTML=`
+    <div style="background:var(--blue-l);border-radius:10px;padding:14px;margin-bottom:14px;border-left:4px solid var(--blue)">
+      <div style="font-size:11px;font-weight:700;color:var(--blue);text-transform:uppercase;margin-bottom:10px">Tipo de Contrato</div>
+      <div class="g2">
+        <div class="fr"><label>Contrato</label>
+          <select id="sc-tipo" onchange="renderSalario()">
+            <option value="horista" ${isHorista?'selected':''}>Horista (por hora)</option>
+            <option value="mensalista" ${!isHorista?'selected':''}>Mensalista (salario fixo)</option>
+          </select></div>
+        <div class="fr"><label>Meta horas/mes</label><input type="number" id="sc-meta" value="${cfg.meta_horas||120}"></div>
+      </div>
+      <div class="g2">
+        <div class="fr"><label>Salario base (R$)</label><input type="number" id="sc-base" value="${cfg.salario_base||0}" step="0.01"></div>
+        <div class="fr"><label>Valor hora fixo (R$) — 0=auto</label><input type="number" id="sc-vh" value="${cfg.valor_hora_fixo||0}" step="0.0001"></div>
+      </div>
+      ${cfg.salario_base>0&&isHorista?`<div style="font-size:12px;color:var(--blue);font-weight:600">-> Valor hora: ${fmtR(parseFloat(cfg.salario_base)/220)}/h</div>`:''}
+    </div>
+    <div style="background:var(--green-l);border-radius:10px;padding:14px;margin-bottom:14px;border-left:4px solid var(--green)">
+      <div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;margin-bottom:10px">Vencimentos (%)</div>
+      <div class="g3">
+        <div class="fr"><label>Periculosidade (%)</label><input type="number" id="sc-peric" value="${cfg.periculosidade||0}" step="0.1"></div>
+        <div class="fr"><label>Quebra de Caixa (%)</label><input type="number" id="sc-qb" value="${cfg.quebra_caixa||0}" step="0.1"></div>
+        <div class="fr"><label>Adic. Funcao (%)</label><input type="number" id="sc-af" value="${cfg.adic_funcao||0}" step="0.1"></div>
+      </div>
+      <div class="g3">
+        <div class="fr"><label>Dupla Funcao (%)</label><input type="number" id="sc-adf" value="${cfg.adic_dupla_funcao||0}" step="0.1"></div>
+        <div class="fr"><label>Gratif. Confianca (%)</label><input type="number" id="sc-conf" value="${cfg.conf_confianca||0}" step="0.1"></div>
+        <div class="fr"><label>DSR (%)</label><input type="number" id="sc-dsr" value="${cfg.dsr_perc||0}" step="0.1"></div>
+      </div>
+      <div class="fr"><label>Auxilio Academico (R$)</label><input type="number" id="sc-auxacad" value="${cfg.aux_academico||0}" step="0.01"></div>
+    </div>
+    <div style="background:var(--red-l);border-radius:10px;padding:14px;margin-bottom:14px;border-left:4px solid var(--red)">
+      <div style="font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase;margin-bottom:10px">Descontos Legais</div>
+      <div class="g2">
+        <div class="fr"><label>INSS (%)</label><input type="number" id="sc-inss" value="${cfg.inss_perc||9.5}" step="0.01"></div>
+        <div class="fr"><label>IRRF estimado (%) — 0=isento</label><input type="number" id="sc-irrf" value="${cfg.irrf_perc||0}" step="0.01"></div>
       </div>
     </div>
-    <div class="list-row"><span style="color:var(--text2);font-size:13px">CPF</span><span style="font-size:13px">${u.cpf||'—'}</span></div>
-    <div class="list-row"><span style="color:var(--text2);font-size:13px">Cargo</span><span style="font-size:13px">${u.cargo||'—'}</span></div>
-    <div class="list-row"><span style="color:var(--text2);font-size:13px">Departamento</span><span style="font-size:13px">${u.departamento||'—'}</span></div>
-    <div class="list-row"><span style="color:var(--text2);font-size:13px">Cadastrado em</span><span style="font-size:13px">${new Date(u.criadoEm).toLocaleDateString('pt-BR')}</span></div>
-    <div class="list-row"><span style="color:var(--text2);font-size:13px">Total de batidas</span><span style="font-size:13px;font-weight:700">${totalReg}</span></div>`;
-
-  if (CFG) {
-    document.getElementById('repo-info-perfil').innerHTML =
-      `<p style="font-size:13px;color:var(--text2)">${CFG.user}/${CFG.repo}</p>`;
-  }
+    <div style="background:var(--amber-l);border-radius:10px;padding:14px;margin-bottom:14px;border-left:4px solid var(--amber)">
+      <div style="font-size:11px;font-weight:700;color:var(--amber);text-transform:uppercase;margin-bottom:10px">Beneficios / Outros Descontos (R$)</div>
+      <div class="g3">
+        <div class="fr"><label>Plano Saude Titular (R$)</label><input type="number" id="sc-ps" value="${cfg.plano_saude||0}" step="0.01"></div>
+        <div class="fr"><label>Plano Odontologico (R$)</label><input type="number" id="sc-po" value="${cfg.plano_odonto||0}" step="0.01"></div>
+        <div class="fr"><label>Vale Alimentacao (R$)</label><input type="number" id="sc-va" value="${cfg.vale_alimentacao||0}" step="0.01"></div>
+      </div>
+      <div class="g3">
+        <div class="fr"><label>Vale Transporte (R$)</label><input type="number" id="sc-vt" value="${cfg.vale_transporte||0}" step="0.01"></div>
+        <div class="fr"><label>Desc. VT (%)</label><input type="number" id="sc-vtp" value="${cfg.vale_transporte_perc||6}" step="0.1"></div>
+        <div class="fr"><label>Custos Gestao (R$)</label><input type="number" id="sc-cg" value="${cfg.custos_gestao||0}" step="0.01"></div>
+      </div>
+      <div class="g3">
+        <div class="fr"><label>Plano Saude Dep. (R$/dep)</label><input type="number" id="sc-psd" value="${cfg.plano_saude_dep||0}" step="0.01"></div>
+        <div class="fr"><label>No. Dependentes</label><input type="number" id="sc-ndep" value="${cfg.num_dependentes||0}" min="0"></div>
+        <div class="fr"><label>FGTS empresa (R$ info)</label><input type="number" id="sc-fgts" value="${cfg.fgts_empresa||0}" step="0.01"></div>
+      </div>
+    </div>
+    <button class="btn bl" id="btn-sal" onclick="salvarSal()" style="width:100%;padding:13px;font-size:15px">Salvar Configuracao Salarial</button>`;
+  calcSalPeriodo();
 }
 
-// ─── INIT ─────────────────────────────────────────────────────────────────────
-(function init() {
-  CFG = getCfg();
-  if (!CFG) { irPara('config-screen'); return; }
-  atualizarLinksRepo();
-  // tenta restaurar sessão
-  const session = getSession();
-  if (session) {
-    USER = session;
-    iniciarApp();
-  } else {
-    irPara('login-screen');
+async function salvarSal(){
+  const gv=id=>{const e=document.getElementById(id);return e?parseFloat(e.value)||0:0};
+  const gi=id=>{const e=document.getElementById(id);return e?parseInt(e.value)||0:0};
+  const cfg={
+    tipo:document.getElementById('sc-tipo').value,
+    salario_base:gv('sc-base'),meta_horas:gi('sc-meta')||120,valor_hora_fixo:gv('sc-vh'),
+    periculosidade:gv('sc-peric'),quebra_caixa:gv('sc-qb'),adic_funcao:gv('sc-af'),
+    adic_dupla_funcao:gv('sc-adf'),conf_confianca:gv('sc-conf'),dsr_perc:gv('sc-dsr'),
+    inss_perc:gv('sc-inss')||9.5,irrf_perc:gv('sc-irrf'),aux_academico:gv('sc-auxacad'),
+    plano_saude:gv('sc-ps'),plano_odonto:gv('sc-po'),vale_alimentacao:gv('sc-va'),
+    vale_transporte:gv('sc-vt'),vale_transporte_perc:gv('sc-vtp')||6,custos_gestao:gv('sc-cg'),
+    plano_saude_dep:gv('sc-psd'),num_dependentes:gi('sc-ndep'),fgts_empresa:gv('sc-fgts'),
+  };
+  const btn=document.getElementById('btn-sal');btn.disabled=true;btn.textContent='Salvando...';
+  setGhStatus('saving','Salvando...');
+  try{
+    await salvarSalConfig(cfg);
+    document.getElementById('barmeta').textContent=(cfg.meta_horas||120)+'h meta';
+    setGhStatus('ok',`${CFG.user}/${CFG.repo}`);
+    toast('Configuracao salarial salva!','s');
+    calcSalPeriodo();calcSim();
+  }catch(e){toast('Erro: '+e.message,'d');setGhStatus('err','Erro')}
+  btn.disabled=false;btn.textContent='Salvar Configuracao Salarial';
+}
+
+function calcSalPeriodo(){
+  const mins=totalMinutosPeriodo();
+  const c=calcularValorHoras(mins/60);
+  const el=document.getElementById('sal-calc');if(!el)return;
+  el.innerHTML=`<div class="ab i" style="margin-bottom:12px">Baseado em <strong>${fmtH(mins)}</strong> trabalhadas no periodo atual</div>
+    ${c.valor_hora>0?`<p style="font-size:12px;color:var(--muted);margin-bottom:10px">Valor/hora: <strong>${fmtR(c.valor_hora)}</strong> | Horas: <strong>${c.horas.toFixed(1)}h</strong></p>`:''}
+    ${renderLinhasSalario(c)}`;
+}
+
+function calcSim(){
+  const h=parseFloat(document.getElementById('sim-h')?.value)||120;
+  const c=calcularValorHoras(h);
+  const el=document.getElementById('sim-res');if(!el)return;
+  el.innerHTML=`<div class="stats" style="margin-bottom:12px">
+    <div class="si"><div class="sv">${h}h</div><div class="sl">Horas</div></div>
+    <div class="si"><div class="sv" style="font-size:14px">${fmtR(c.bruto)}</div><div class="sl">Bruto</div></div>
+    <div class="si g"><div class="sv" style="font-size:14px">${fmtR(c.liquido)}</div><div class="sl">Liquido</div></div>
+  </div>
+  ${c.valor_hora>0?`<p style="font-size:12px;color:var(--muted);margin-bottom:10px">Valor/hora: <strong>${fmtR(c.valor_hora)}</strong></p>`:''}
+  ${renderLinhasSalario(c)}`;
+  const horas=[80,90,100,110,120,130,140,150,160,180,200];
+  const tbl=document.getElementById('sim-tbl');if(!tbl)return;
+  tbl.innerHTML=`<div style="overflow-x:auto"><table class="tbl">
+    <thead><tr><th>Horas</th><th class="r">Vencimentos</th><th class="r">Bruto</th><th class="r">(-) INSS</th><th class="r" style="color:var(--green)">Liquido</th></tr></thead>
+    <tbody>${horas.map(hh=>{const cc=calcularValorHoras(hh),dest=hh===(CFG_SAL.meta_horas||120);
+      return`<tr style="${dest?'background:var(--blue-l);font-weight:700':''}">
+        <td>${hh}h${dest?' *':''}</td>
+        <td class="r">${fmtR(cc.total_venc)}</td>
+        <td class="r">${fmtR(cc.bruto)}</td>
+        <td class="r" style="color:var(--red)">${fmtR(cc.inss)}</td>
+        <td class="r" style="color:var(--green);font-weight:700">${fmtR(cc.liquido)}</td>
+      </tr>`}).join('')}</tbody>
+  </table></div>`;
+}
+
+// ═══════════════════════════════════════════
+//  FUNCIONARIOS
+// ═══════════════════════════════════════════
+async function renderFuncionarios(){
+  const{data:usuarios}=await lerUsuarios();
+  const el=document.getElementById('func-list');if(!el)return;
+  if(!usuarios.length){el.innerHTML='<div class="nd"><div class="nd-ico">&#128101;</div>Nenhum funcionario</div>';return}
+  el.innerHTML=usuarios.map(u=>`
+    <div class="fuc" onclick="verFunc('${u.id}')">
+      <div class="fua">${u.nome.charAt(0).toUpperCase()}</div>
+      <div>
+        <div class="fun">${u.nome} ${u.admin?'<span class="badge b">admin</span>':''}</div>
+        <div class="fus">${u.empresa||u.setor||'-'} &middot; <span class="badge ${(u.tipo||'horista')==='horista'?'b':'g'}">${u.tipo||'horista'}</span></div>
+      </div>
+      <div style="margin-left:auto;text-align:right;font-size:12px;color:var(--muted)">${u.meta_horas||120}h/mes</div>
+    </div>`).join('');
+}
+
+async function verFunc(id){
+  const{data:usuarios}=await lerUsuarios();
+  const u=usuarios.find(x=>x.id===id);if(!u)return;
+  document.getElementById('modal-body').innerHTML=`
+    <h3>&#128100; ${u.nome}</h3>
+    <div class="sr-row"><span class="d">E-mail</span><span>${u.email}</span></div>
+    <div class="sr-row"><span class="d">Empresa</span><span>${u.empresa||'-'}</span></div>
+    <div class="sr-row"><span class="d">Setor</span><span>${u.setor||'-'}</span></div>
+    <div class="sr-row"><span class="d">Registro</span><span>${u.registro||'-'}</span></div>
+    <div class="sr-row"><span class="d">Profissao</span><span>${u.profissao||'-'}</span></div>
+    <div class="sr-row"><span class="d">Tipo</span><span><span class="badge ${(u.tipo||'horista')==='horista'?'b':'g'}">${u.tipo||'horista'}</span></span></div>
+    <div class="sr-row"><span class="d">Meta horas</span><span>${u.meta_horas||120}h/mes</span></div>
+    <div class="sr-row"><span class="d">Salario base</span><span>${fmtR(u.salario_base||0)}</span></div>
+    <div class="btn-row" style="margin-top:16px">
+      <button class="btn bl" onclick="editarFunc('${u.id}')">&#9998; Editar</button>
+      ${!u.admin?`<button class="btn br" onclick="excluirFunc('${u.id}')">&#128465; Excluir</button>`:''}
+      <button class="btn bo" onclick="closeModal()">Fechar</button>
+    </div>`;
+  document.getElementById('modal').style.display='flex';
+}
+
+function editarFunc(id){
+  document.getElementById('modal').style.display='none';
+  setTimeout(async()=>{
+    const{data:usuarios}=await lerUsuarios();
+    const u=usuarios.find(x=>x.id===id);if(!u)return;
+    document.getElementById('modal-body').innerHTML=`
+      <h3>&#9998; Editar Funcionario</h3>
+      <div class="g2">
+        <div class="fr"><label>Setor</label><input id="ef-setor" value="${u.setor||''}"></div>
+        <div class="fr"><label>Empresa</label><input id="ef-empresa" value="${u.empresa||''}"></div>
+      </div>
+      <div class="g2">
+        <div class="fr"><label>N. Registro</label><input id="ef-reg" value="${u.registro||''}"></div>
+        <div class="fr"><label>Profissao</label><input id="ef-prof" value="${u.profissao||''}"></div>
+      </div>
+      <div class="g2">
+        <div class="fr"><label>Meta horas</label><input type="number" id="ef-meta" value="${u.meta_horas||120}"></div>
+        <div class="fr"><label>Hora entrada</label><input type="time" id="ef-ent" value="${u.hora_entrada||'07:30'}"></div>
+      </div>
+      <div class="fr"><label>Salario base (R$)</label><input type="number" id="ef-sal" value="${u.salario_base||0}" step="0.01"></div>
+      <div class="btn-row">
+        <button class="btn bl" onclick="salvarFunc('${id}')">Salvar</button>
+        <button class="btn bo" onclick="closeModal()">Cancelar</button>
+      </div>`;
+    document.getElementById('modal').style.display='flex';
+  },50);
+}
+
+async function salvarFunc(id){
+  setGhStatus('saving','Salvando...');
+  try{
+    _cache.u=null;
+    const{data:usuarios,sha}=await lerUsuarios(true);
+    const idx=usuarios.findIndex(u=>u.id===id);if(idx<0)return;
+    usuarios[idx].setor=document.getElementById('ef-setor').value;
+    usuarios[idx].empresa=document.getElementById('ef-empresa').value;
+    usuarios[idx].registro=document.getElementById('ef-reg').value;
+    usuarios[idx].profissao=document.getElementById('ef-prof').value;
+    usuarios[idx].meta_horas=parseInt(document.getElementById('ef-meta').value)||120;
+    usuarios[idx].hora_entrada=document.getElementById('ef-ent').value+':00';
+    usuarios[idx].salario_base=parseFloat(document.getElementById('ef-sal').value)||0;
+    await salvarUsuarios(usuarios,sha,'PontoHora: edita func '+usuarios[idx].nome);
+    if(usuarios[idx].id===USER.id){USER=usuarios[idx];saveSes(USER)}
+    setGhStatus('ok',`${CFG.user}/${CFG.repo}`);
+    closeModal();renderFuncionarios();toast('Funcionario atualizado!','s');
+  }catch(e){toast('Erro: '+e.message,'d');setGhStatus('err','Erro')}
+}
+
+async function excluirFunc(id){
+  if(!confirm('Remover este funcionario?'))return;
+  setGhStatus('saving','Salvando...');
+  try{
+    _cache.u=null;
+    const{data:usuarios,sha}=await lerUsuarios(true);
+    const novos=usuarios.filter(u=>u.id!==id);
+    await salvarUsuarios(novos,sha,'PontoHora: remove func');
+    setGhStatus('ok',`${CFG.user}/${CFG.repo}`);
+    closeModal();renderFuncionarios();toast('Removido.');
+  }catch(e){toast('Erro: '+e.message,'d');setGhStatus('err','Erro')}
+}
+
+function modalCadFunc(){
+  document.getElementById('modal-body').innerHTML=`
+    <h3>+ Novo Funcionario</h3>
+    <div class="fr"><label>Nome completo *</label><input id="nf-nome"></div>
+    <div class="fr"><label>E-mail *</label><input type="email" id="nf-email"></div>
+    <div class="fr"><label>Senha *</label><input type="password" id="nf-senha"></div>
+    <div class="g2">
+      <div class="fr"><label>Setor</label><input id="nf-setor"></div>
+      <div class="fr"><label>Empresa</label><input id="nf-empresa"></div>
+    </div>
+    <div class="g2">
+      <div class="fr"><label>Tipo</label>
+        <select id="nf-tipo"><option value="horista">Horista</option><option value="mensalista">Mensalista</option></select>
+      </div>
+      <div class="fr"><label>Meta horas</label><input type="number" id="nf-meta" value="120"></div>
+    </div>
+    <div class="g2">
+      <div class="fr"><label>Salario base (R$)</label><input type="number" id="nf-sal" value="0" step="0.01"></div>
+      <div class="fr"><label>Hora entrada</label><input type="time" id="nf-ent" value="07:30"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn bl" id="btn-cad-func" onclick="cadastrarFunc()">Cadastrar</button>
+      <button class="btn bo" onclick="closeModal()">Cancelar</button>
+    </div>`;
+  document.getElementById('modal').style.display='flex';
+}
+
+async function cadastrarFunc(){
+  const nome=document.getElementById('nf-nome').value.trim();
+  const email=document.getElementById('nf-email').value.trim().toLowerCase();
+  const senha=document.getElementById('nf-senha').value;
+  if(!nome||!email||!senha){toast('Nome, e-mail e senha sao obrigatorios.','d');return}
+  const btn=document.getElementById('btn-cad-func');btn.disabled=true;
+  setGhStatus('saving','Salvando...');
+  try{
+    _cache.u=null;
+    const{data:usuarios,sha}=await lerUsuarios(true);
+    if(usuarios.find(u=>u.email===email)){toast('E-mail ja cadastrado.','d');btn.disabled=false;return}
+    const novo={id:'u'+Date.now(),nome,email,senha,tipo:document.getElementById('nf-tipo').value,
+      setor:document.getElementById('nf-setor').value,empresa:document.getElementById('nf-empresa').value,
+      registro:'',profissao:'',meta_horas:parseInt(document.getElementById('nf-meta').value)||120,
+      hora_entrada:document.getElementById('nf-ent').value+':00',
+      salario_base:parseFloat(document.getElementById('nf-sal').value)||0,
+      criadoEm:new Date().toISOString(),admin:false,faturas:[]};
+    usuarios.push(novo);
+    await salvarUsuarios(usuarios,sha,'PontoHora: cadastro '+nome);
+    setGhStatus('ok',`${CFG.user}/${CFG.repo}`);
+    closeModal();renderFuncionarios();toast(`${nome} cadastrado!`,'s');
+  }catch(e){toast('Erro: '+e.message,'d');setGhStatus('err','Erro')}
+  btn.disabled=false;
+}
+
+// ═══════════════════════════════════════════
+//  CONFIG / PERFIL
+// ═══════════════════════════════════════════
+function renderConfig(){
+  const el=document.getElementById('cfg-perfil');if(!el)return;
+  el.innerHTML=`
+    <div class="sr-row"><span class="d">Nome</span><span>${USER.nome}</span></div>
+    <div class="sr-row"><span class="d">E-mail</span><span>${USER.email}</span></div>
+    <div class="sr-row"><span class="d">Tipo</span><span><span class="badge b">${USER.tipo||'horista'}</span></span></div>
+    <div class="sr-row"><span class="d">Setor</span><span>${USER.setor||'-'}</span></div>
+    <div class="sr-row"><span class="d">Meta</span><span>${USER.meta_horas||120}h/mes</span></div>
+    ${USER.admin?'<div class="sr-row"><span class="d">Funcao</span><span><span class="badge b">admin</span></span></div>':''}`;
+  atualizarLinksGH();
+}
+
+function exportarLocal(){
+  const data={usuarios:_cache.u?.data||[],registros:_cache.r?.data||{},exportadoEm:new Date().toISOString()};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download=`pontohora_backup_${today()}.json`;a.click();
+  toast('Backup exportado!','s');
+}
+
+function importarLocal(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const d=JSON.parse(e.target.result);
+      if(d.registros)_cache.r={data:d.registros,sha:_cache.r?.sha};
+      renderPonto();renderHistorico&&renderHistorico();toast('Dados importados localmente!','s');
+    }catch{toast('Arquivo invalido.','d')}
+  };reader.readAsText(file);
+}
+
+// ═══════════════════════════════════════════
+//  RELATORIO
+// ═══════════════════════════════════════════
+function gerarRelatorio(){
+  const{ini,fim}=periodoAtual();
+  const reg=_cache.r?.data||{};
+  const pi=ini.split('-'),pf=fim.split('-');
+  const periodoLabel=`${pi[2]}/${pi[1]}/${pi[0]} a ${pf[2]}/${pf[1]}/${pf[0]}`;
+  let diasTodos=[],totalMins=0;
+  const cur=new Date(ini+'T12:00:00'),fimD=new Date(fim+'T12:00:00');
+  const dsemN=['Dom','Seg','Ter','Qua','Qui','Sex','Sab'];
+  while(cur<=now()&&cur<fimD){
+    const ds=`${cur.getFullYear()}-${pad(cur.getMonth()+1)}-${pad(cur.getDate())}`;
+    const dow=cur.getDay(),fds=(dow===0||dow===6);
+    const pontos=fds?[]:((reg[ds]||[]).filter(p=>p.userId===USER.id));
+    const mins=fds?0:calcMinutosDia(pontos);
+    if(!fds)totalMins+=mins;
+    diasTodos.push({data:ds,dow,fds,pontos,mins,label:`${pad(cur.getDate())}/${pad(cur.getMonth()+1)} ${dsemN[dow]}`});
+    cur.setDate(cur.getDate()+1);
   }
+  montarRelatorio(diasTodos,totalMins,periodoLabel);
+}
+
+function modalRelPeriodo(){
+  document.getElementById('modal-body').innerHTML=`
+    <h3>Relatorio por Periodo</h3>
+    <div class="g2">
+      <div class="fr"><label>Data inicio</label><input type="date" id="rp-ini" value="${today()}"></div>
+      <div class="fr"><label>Data fim</label><input type="date" id="rp-fim" value="${today()}"></div>
+    </div>
+    <div class="btn-row" style="margin-top:8px">
+      <button class="btn bl" onclick="gerarRelPeriodo()">Gerar</button>
+      <button class="btn bo" onclick="closeModal()">Cancelar</button>
+    </div>`;
+  document.getElementById('modal').style.display='flex';
+}
+
+function gerarRelPeriodo(){
+  const ini=document.getElementById('rp-ini').value,fim=document.getElementById('rp-fim').value;
+  if(!ini||!fim){toast('Informe as datas.','d');return}
+  closeModal();
+  const reg=_cache.r?.data||{};
+  let diasTodos=[],totalMins=0;
+  const cur=new Date(ini+'T12:00:00'),fimD=new Date(fim+'T12:00:00');
+  const dsemN=['Dom','Seg','Ter','Qua','Qui','Sex','Sab'];
+  while(cur<=fimD){
+    const ds=`${cur.getFullYear()}-${pad(cur.getMonth()+1)}-${pad(cur.getDate())}`;
+    const dow=cur.getDay(),fds=(dow===0||dow===6);
+    const pontos=fds?[]:((reg[ds]||[]).filter(p=>p.userId===USER.id));
+    const mins=fds?0:calcMinutosDia(pontos);
+    if(!fds)totalMins+=mins;
+    diasTodos.push({data:ds,dow,fds,pontos,mins,label:`${pad(cur.getDate())}/${pad(cur.getMonth()+1)} ${dsemN[dow]}`});
+    cur.setDate(cur.getDate()+1);
+  }
+  const iF=ini.split('-').reverse().join('/'),fF=fim.split('-').reverse().join('/');
+  montarRelatorio(diasTodos,totalMins,ini===fim?iF:`${iF} a ${fF}`);
+}
+
+function montarRelatorio(dias,totalMins,periodoLabel){
+  const meta=(CFG_SAL.meta_horas||120)*60;
+  const pct=Math.min(100,Math.round((totalMins/meta)*100));
+  const diasTrab=dias.filter(d=>!d.fds&&d.mins>0).length;
+  const diasUtil=dias.filter(d=>!d.fds).length;
+  const n=new Date(),ge=`${pad(n.getDate())}/${pad(n.getMonth()+1)}/${n.getFullYear()} ${pad(n.getHours())}:${pad(n.getMinutes())}`;
+  const ts='padding:5px 7px;border-bottom:1px solid #e5e7eb;font-size:11px;';
+  const th='padding:6px 7px;background:#f1f5f9;border-bottom:2px solid #cbd5e1;font-size:10px;font-weight:700;text-align:center;color:#374151;';
+  let atTot=0;
+  const rows=dias.map(d=>{
+    if(d.fds)return`<tr style="background:#f9fafb"><td style="${ts}color:#94a3b8;font-size:10px">${d.label}</td><td colspan="5" style="${ts}"></td></tr>`;
+    const E=d.pontos.find(p=>p.tipo==='E'),PI=d.pontos.find(p=>p.tipo==='PI'),PV=d.pontos.find(p=>p.tipo==='PV'),S=d.pontos.find(p=>p.tipo==='S');
+    const h=t=>t?t.hora.substring(0,5):'';
+    const pts=[h(E),h(PI),h(PV),h(S)].filter(Boolean).join(' ');
+    const hl=d.mins>0?minsHHMM(d.mins):'';
+    const ep=t2m(USER.hora_entrada?.substring(0,5)||'07:30'),er=E?t2m(E.hora.substring(0,5)):0;
+    const at=(E&&er>ep+2)?er-ep:0;if(at>0)atTot+=at;
+    return`<tr style="background:${d.mins===0?'#fff5f5':'#fff'}">
+      <td style="${ts}font-weight:600;white-space:nowrap">${d.label}</td>
+      <td style="${ts}font-family:monospace;font-size:10px">${pts}</td>
+      <td style="${ts}text-align:center;font-weight:700;color:${d.mins>=330?'#15803d':d.mins>0?'#1d4ed8':'#94a3b8'}">${hl}</td>
+      <td style="${ts}text-align:center;color:#dc2626;font-weight:600">${at>0?minsHHMM(at):''}</td>
+      <td style="${ts}text-align:center;color:#dc2626;font-weight:700">${d.mins===0&&!d.fds?'FA':''}</td>
+    </tr>`;
+  }).join('');
+  const calc=calcularValorHoras(totalMins/60);
+  let sh='';(calc.itens||[]).forEach(i=>{
+    const isDesc=i.grupo==='desc'||(i.grupo==='bene'&&i.desc.startsWith('(-)'));
+    const cor=i.credito||i.grupo==='liq'?'color:#16a34a':isDesc?'color:#dc2626':'';
+    const pre=i.credito?'+':isDesc?'−':'';
+    const fw=i.grupo==='sub'||i.grupo==='liq'?'font-weight:700':'';
+    sh+=`<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #f1f5f9;font-size:12px;${fw}"><span>${i.desc}</span><span style="${cor}">${pre}${fmtR(i.val)}</span></div>`;
+  });
+  document.getElementById('rel-conteudo').innerHTML=`
+    <div id="espelho-print" style="font-family:Arial,sans-serif;background:#fff;color:#111">
+      <div style="text-align:center;padding:16px 20px 10px;border-bottom:2px solid #1e3a5f">
+        <div style="font-size:18px;font-weight:900;color:#1e3a5f">Sistema de Apuracao de Pontos</div>
+        <div style="font-size:11px;color:#64748b;margin-top:2px">PontoHora Pro</div>
+      </div>
+      <div style="padding:12px 20px 0">
+        <table style="width:100%;border-collapse:collapse;margin-bottom:10px;font-size:12px">
+          <tr><td style="padding:2px 0;width:50%"><strong>Empresa:</strong> ${USER.empresa||'-'}</td><td><strong>Matricula:</strong> ${USER.registro||'-'}</td></tr>
+          <tr><td style="padding:2px 0"><strong>Nome:</strong> ${USER.nome}</td><td><strong>PIS:</strong> -</td></tr>
+          <tr><td style="padding:2px 0"><strong>Cargo:</strong> ${USER.profissao||'-'}</td><td><strong>CPF:</strong> -</td></tr>
+          <tr><td style="padding:2px 0"><strong>Depart.:</strong> ${USER.setor||'-'}</td><td><strong>Admissao:</strong> -</td></tr>
+          <tr><td colspan="2" style="padding:2px 0"><strong>Periodo:</strong> ${periodoLabel}</td></tr>
+        </table>
+        <table style="width:100%;border-collapse:collapse;margin-bottom:12px">
+          <thead><tr>
+            <th style="${th}text-align:left;width:90px">Data</th>
+            <th style="${th}text-align:left">Pontos</th>
+            <th style="${th}width:50px">HT</th>
+            <th style="${th}width:45px">AT</th>
+            <th style="${th}width:40px">FA</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+        <div style="border-top:2px solid #1e3a5f;padding:8px 0;font-size:12px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px 20px">
+            <div><strong>Atraso (AT):</strong> ${minsHHMM(atTot)}</div>
+            <div><strong>Dias trabalhados:</strong> ${diasTrab}/${diasUtil}</div>
+            <div><strong>Total horas:</strong> <span style="color:#1d4ed8;font-weight:700">${minsHHMM(totalMins)}</span></div>
+            <div><strong>Meta:</strong> ${minsHHMM(meta)} (${pct}%)</div>
+          </div>
+        </div>
+        <div style="margin:10px 0;padding:10px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px">
+          <div style="font-weight:700;color:#1e3a5f;font-size:12px;margin-bottom:8px">Estimativa Salarial</div>${sh}
+        </div>
+        <div style="margin-top:16px;font-size:11px">
+          <div style="margin-bottom:12px">Como Funcionario, reconheco como verdadeiras as informacoes contidas neste relatorio.</div>
+          <div style="display:flex;gap:40px">
+            <div style="flex:1;border-top:1px solid #374151;padding-top:4px;text-align:center">Funcionario</div>
+            <div style="flex:1;border-top:1px solid #374151;padding-top:4px;text-align:center">Empregador / RH</div>
+          </div>
+        </div>
+        <div style="margin-top:10px;font-size:10px;color:#94a3b8;text-align:right;border-top:1px solid #e5e7eb;padding-top:6px">Gerado em: ${ge} &middot; PontoHora Pro</div>
+      </div>
+    </div>
+    <div style="padding:14px 20px;display:flex;gap:10px;border-top:1px solid var(--line);background:var(--bg)">
+      <button class="btn bl" onclick="imprimirEspelho()">Imprimir / PDF</button>
+      <button class="btn bo" onclick="document.getElementById('modal-relatorio').style.display='none'">Fechar</button>
+    </div>`;
+  document.getElementById('modal-relatorio').style.display='block';
+}
+
+function imprimirEspelho(){
+  const conteudo=document.getElementById('espelho-print').innerHTML;
+  const w=window.open('','_blank','width=800,height=900');
+  w.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Espelho de Pontos</title>
+    <style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;font-size:12px;padding:16px}
+    @media print{@page{margin:1.5cm;size:A4}}</style></head><body>${conteudo}</body></html>`);
+  w.document.close();setTimeout(()=>w.print(),400);
+}
+
+// ═══════════════════════════════════════════
+//  NAVEGACAO
+// ═══════════════════════════════════════════
+const titulos={
+  ponto:{t:'Ponto do Dia',s:'Controle de jornada'},
+  historico:{t:'Historico de Ponto',s:'Visualize e feche periodos'},
+  salario:{t:'Salario',s:'Configure sua remuneracao'},
+  simulador:{t:'Simulador',s:'Simule cenarios de horas'},
+  funcionarios:{t:'Funcionarios',s:'Gerencie os usuarios'},
+  config:{t:'Configuracoes',s:'Perfil e repositorio'},
+};
+
+function pg(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.ni').forEach(b=>b.classList.remove('on'));
+  document.getElementById('page-'+id).classList.add('on');
+  if(btn)btn.classList.add('on');
+  const t=titulos[id]||{t:id,s:''};
+  document.getElementById('tbtitle').textContent=t.t;
+  document.getElementById('tbsub').textContent=t.s;
+  document.getElementById('sb').classList.remove('open');
+  if(id==='historico')renderHistorico();
+  if(id==='salario')renderSalario();
+  if(id==='simulador')calcSim();
+  if(id==='funcionarios')renderFuncionarios();
+  if(id==='config')renderConfig();
+}
+
+function toggleSB(){document.getElementById('sb').classList.toggle('open')}
+function closeModal(){document.getElementById('modal').style.display='none'}
+
+// ═══════════════════════════════════════════
+//  MODO ESCURO
+// ═══════════════════════════════════════════
+function toggleDark(){
+  document.body.classList.toggle('dark');
+  const isDark=document.body.classList.contains('dark');
+  localStorage.setItem('ph_dark',isDark?'1':'0');
+}
+
+// ═══════════════════════════════════════════
+//  TOAST
+// ═══════════════════════════════════════════
+let _toastT;
+function toast(msg,type,dur){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.className=`toast toast-${type||'n'}`;
+  clearTimeout(_toastT);_toastT=setTimeout(()=>el.classList.add('hide'),dur||3200);
+}
+
+// ═══════════════════════════════════════════
+//  BOOT
+// ═══════════════════════════════════════════
+(function init(){
+  if(localStorage.getItem('ph_dark')==='1')document.body.classList.add('dark');
+  CFG=getCfg();
+  if(!CFG){
+    document.getElementById('cfg-screen').style.display='block';
+    document.getElementById('lform-screen').style.display='none';
+    return;
+  }
+  document.getElementById('cfg-screen').style.display='none';
+  document.getElementById('lform-screen').style.display='block';
+  const ses=getSes();
+  if(ses){USER=ses;entrarApp()}
 })();
 </script>
 </body>
