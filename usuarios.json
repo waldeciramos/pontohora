@@ -1,1 +1,13 @@
-[]
+[
+  {
+    "id": "u1779569764665",
+    "nome": "Waldeci Ramos",
+    "cpf": "000.124.516-30",
+    "cargo": "Analista de Serviços Internos",
+    "departamento": "Finaças",
+    "email": "waldeciramos@gmail.com",
+    "senha": "Minas*70",
+    "criadoEm": "2026-05-23T20:56:04.665Z",
+    "admin": true
+  }
+]
