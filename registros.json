@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "id": "r1779570079687",
+    "userId": "u1779569764665",
+    "nomeUsuario": "Waldeci Ramos",
+    "data": "2026-05-23",
+    "hora": "18:01:19",
+    "timestamp": "2026-05-23T21:01:19.687Z",
+    "tipo": "entrada"
+  }
+]
