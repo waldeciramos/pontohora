@@ -7,5 +7,14 @@
     "hora": "18:01:19",
     "timestamp": "2026-05-23T21:01:19.687Z",
     "tipo": "entrada"
+  },
+  {
+    "id": "r1779570082727",
+    "userId": "u1779569764665",
+    "nomeUsuario": "Waldeci Ramos",
+    "data": "2026-05-23",
+    "hora": "18:01:22",
+    "timestamp": "2026-05-23T21:01:22.727Z",
+    "tipo": "almoco_ini"
   }
 ]
