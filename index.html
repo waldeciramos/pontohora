@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PontoHora</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5f5f3;--surface:#fff;--border:#e0ddd8;--border2:#ccc9c2;
+  --text:#1a1a1a;--text2:#6b6b6b;--text3:#9e9e9e;
+  --green-bg:#eaf3de;--green-tx:#3b6d11;
+  --red-bg:#fcebeb;--red-tx:#a32d2d;
+  --amber-bg:#faeeda;--amber-tx:#854f0b;
+  --teal-bg:#e1f5ee;--teal-tx:#0f6e56;
+  --blue-bg:#e6f1fb;--blue-tx:#185fa5;
+  --r:10px;--rs:6px;--font:-apple-system,'Segoe UI',sans-serif;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center}
+.app{width:100%;max-width:480px;min-height:100vh;background:var(--surface);display:flex;flex-direction:column;border-left:.5px solid var(--border);border-right:.5px solid var(--border)}
+.screen{display:none;flex-direction:column;flex:1}
+.screen.active{display:flex}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:.5px solid var(--border);background:var(--surface);position:sticky;top:0;z-index:10}
+.topbar h1{font-size:15px;font-weight:600}
+.nav{display:flex;border-top:.5px solid var(--border);background:var(--surface)}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 4px 12px;border:none;background:transparent;cursor:pointer;color:var(--text3);font-size:10px;gap:3px;font-family:var(--font);transition:color .15s}
+.nav-btn i{font-size:21px}
+.nav-btn.active{color:var(--text)}
+.content{flex:1;overflow-y:auto;padding:16px}
+.card{background:var(--surface);border:.5px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:12px}
+.card-title{font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:var(--rs);border:.5px solid var(--border2);background:transparent;cursor:pointer;font-size:13px;font-weight:500;color:var(--text);font-family:var(--font);transition:background .12s;white-space:nowrap}
+.btn:hover{background:var(--bg)}
+.btn:active{transform:scale(.98)}
+.btn-dark{background:var(--text);color:var(--surface);border-color:var(--text)}
+.btn-dark:hover{opacity:.85;background:var(--text)}
+.btn-full{width:100%;justify-content:center;margin-bottom:8px}
+.btn-danger{border-color:#e24b4a;color:#a32d2d}
+.btn-danger:hover{background:var(--red-bg)}
+.btn-sm{padding:6px 12px;font-size:12px}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12px;color:var(--text2);margin-bottom:5px;font-weight:500}
+.field input,.field select{width:100%;padding:9px 11px;border:.5px solid var(--border2);border-radius:var(--rs);font-size:14px;font-family:var(--font);color:var(--text);background:var(--surface);outline:none}
+.field input:focus{border-color:var(--text)}
+.field input[type=password]{letter-spacing:2px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px}
+.b-entrada{background:var(--green-bg);color:var(--green-tx)}
+.b-saida{background:var(--red-bg);color:var(--red-tx)}
+.b-almoco_ini{background:var(--amber-bg);color:var(--amber-tx)}
+.b-almoco_fim{background:var(--teal-bg);color:var(--teal-tx)}
+.avatar{width:38px;height:38px;border-radius:50%;background:var(--blue-bg);color:var(--blue-tx);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.clock-wrap{text-align:center;padding:24px 0 16px}
+.clock-time{font-size:52px;font-weight:300;letter-spacing:-3px;font-variant-numeric:tabular-nums;line-height:1}
+.clock-date{font-size:13px;color:var(--text2);margin-top:6px;text-transform:capitalize}
+.ponto-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:4px 0 16px}
+.ponto-card{border:.5px solid var(--border);border-radius:var(--r);padding:14px 10px;text-align:center;cursor:pointer;background:var(--surface);transition:all .12s;user-select:none}
+.ponto-card:hover{border-color:var(--border2);background:var(--bg)}
+.ponto-card:active{transform:scale(.97)}
+.ponto-card.done{opacity:.35;pointer-events:none}
+.ponto-card.loading{opacity:.6;pointer-events:none}
+.pc-icon{font-size:24px;display:block;margin-bottom:5px}
+.pc-label{font-size:12px;font-weight:600;color:var(--text)}
+.pc-hora{font-size:11px;color:var(--text2);margin-top:2px;font-variant-numeric:tabular-nums}
+.list-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:.5px solid var(--border);font-size:13px}
+.list-row:last-child{border-bottom:none}
+.msg{padding:10px 13px;border-radius:var(--rs);font-size:13px;margin-bottom:12px;font-weight:500;display:flex;align-items:center;gap:8px}
+.msg-ok{background:var(--green-bg);color:var(--green-tx)}
+.msg-err{background:var(--red-bg);color:var(--red-tx)}
+.msg-info{background:var(--blue-bg);color:var(--blue-tx)}
+.spinner{width:14px;height:14px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.info-box{background:var(--blue-bg);border-radius:var(--rs);padding:12px 14px;font-size:12px;color:var(--blue-tx);margin-bottom:12px;line-height:1.7}
+.info-box strong{font-weight:700}
+kbd{background:rgba(24,95,165,.13);padding:1px 5px;border-radius:3px;font-family:monospace;font-size:11px}
+code{font-size:11px;background:var(--bg);padding:1px 5px;border-radius:3px;font-family:monospace;border:.5px solid var(--border)}
+#config-screen .content{justify-content:center;display:flex;flex-direction:column}
+.config-brand{text-align:center;margin-bottom:28px}
+.config-brand .logo-icon{font-size:44px;color:var(--text)}
+.config-brand h2{font-size:24px;font-weight:700;margin-top:8px}
+.config-brand p{font-size:13px;color:var(--text2);margin-top:4px}
+#login-screen .content{justify-content:center;display:flex;flex-direction:column}
+.login-brand{text-align:center;margin-bottom:28px}
+.login-brand .logo-icon{font-size:40px;color:var(--text)}
+.login-brand h2{font-size:22px;font-weight:700;margin-top:6px}
+.login-brand p{font-size:13px;color:var(--text2);margin-top:3px}
+.tag-admin{font-size:10px;padding:2px 7px;border-radius:4px;background:#eeedfe;color:#534ab7;font-weight:600;vertical-align:middle}
+.resumo-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.resumo-card{background:var(--bg);border-radius:var(--rs);padding:10px 12px}
+.resumo-card .rc-label{font-size:11px;color:var(--text2);margin-bottom:3px}
+.resumo-card .rc-val{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
+.dia-header{font-size:11px;font-weight:700;color:var(--text2);margin:14px 0 6px;text-transform:uppercase;letter-spacing:.5px}
+.step{display:flex;gap:10px;margin-bottom:12px;font-size:13px;line-height:1.6}
+.step-num{background:var(--text);color:var(--surface);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
+.online-dot{width:7px;height:7px;border-radius:50%;background:#3b6d11;display:inline-block;margin-right:4px}
+.offline-dot{width:7px;height:7px;border-radius:50%;background:#a32d2d;display:inline-block;margin-right:4px}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- ===== CONFIGURAÇÃO INICIAL ===== -->
+<div id="config-screen" class="screen active">
+  <div class="content">
+    <div class="config-brand">
+      <i class="ti ti-clock logo-icon"></i>
+      <h2>PontoHora</h2>
+      <p>Configure o repositório GitHub para salvar os dados</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Configuração do GitHub</div>
+      <div id="config-msg"></div>
+      <div class="field">
+        <label>Usuário GitHub</label>
+        <input type="text" id="cfg-user" placeholder="seu-usuario">
+      </div>
+      <div class="field">
+        <label>Nome do repositório</label>
+        <input type="text" id="cfg-repo" placeholder="pontohora">
+      </div>
+      <div class="field">
+        <label>Personal Access Token
+          <a href="https://github.com/settings/tokens/new?scopes=repo&description=PontoHora" target="_blank"
+             style="color:var(--blue-tx);font-weight:400;margin-left:6px;font-size:11px">
+            <i class="ti ti-external-link" style="font-size:11px"></i> Gerar token
+          </a>
+        </label>
+        <input type="password" id="cfg-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+      </div>
+      <button class="btn btn-dark btn-full" onclick="salvarConfig()">
+        <i class="ti ti-check"></i> Salvar e conectar
+      </button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Como configurar</div>
+      <div class="step"><div class="step-num">1</div><div>Crie um repositório <strong>público</strong> no GitHub chamado <code>pontohora</code> e ative o <strong>GitHub Pages</strong> (Settings → Pages → Branch: main)</div></div>
+      <div class="step"><div class="step-num">2</div><div>Clique em <strong>"Gerar token"</strong> acima. Marque o escopo <code>repo</code> e crie o token.</div></div>
+      <div class="step"><div class="step-num">3</div><div>Preencha os campos acima com seu usuário, nome do repositório e o token gerado.</div></div>
+      <div class="step"><div class="step-num">4</div><div>Clique em <strong>Salvar e conectar</strong>. Os arquivos <code>usuarios.json</code> e <code>registros.json</code> serão criados automaticamente no repositório.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LOGIN ===== -->
+<div id="login-screen" class="screen">
+  <div class="content">
+    <div class="login-brand">
+      <i class="ti ti-clock logo-icon"></i>
+      <h2>PontoHora</h2>
+      <p id="login-repo-label">—</p>
+    </div>
+    <div class="card">
+      <div id="login-msg"></div>
+      <div class="field">
+        <label>E-mail</label>
+        <input type="email" id="login-email" placeholder="seu@email.com">
+      </div>
+      <div class="field">
+        <label>Senha</label>
+        <input type="password" id="login-senha" placeholder="••••••" onkeydown="if(event.key==='Enter')fazerLogin()">
+      </div>
+      <button class="btn btn-dark btn-full" id="btn-login" onclick="fazerLogin()">
+        <i class="ti ti-login"></i> Entrar
+      </button>
+      <button class="btn btn-full" onclick="irPara('cadastro-screen')">Criar conta</button>
+    </div>
+    <p style="text-align:center;font-size:12px;color:var(--text3);margin-top:8px;cursor:pointer" onclick="irPara('config-screen')">
+      <i class="ti ti-settings" style="font-size:13px;vertical-align:-2px"></i> Alterar configuração do GitHub
+    </p>
+  </div>
+</div>
+
+<!-- ===== CADASTRO ===== -->
+<div id="cadastro-screen" class="screen">
+  <div class="topbar">
+    <button class="btn btn-sm" onclick="irPara('login-screen')"><i class="ti ti-arrow-left"></i> Voltar</button>
+    <h1>Nova conta</h1>
+    <div style="width:70px"></div>
+  </div>
+  <div class="content">
+    <div id="cad-msg"></div>
+    <div class="field-row">
+      <div class="field"><label>Nome completo</label><input type="text" id="cad-nome" placeholder="João Silva"></div>
+      <div class="field"><label>CPF</label><input type="text" id="cad-cpf" placeholder="000.000.000-00" maxlength="14"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Cargo</label><input type="text" id="cad-cargo" placeholder="Analista..."></div>
+      <div class="field"><label>Departamento</label><input type="text" id="cad-depto" placeholder="TI, RH..."></div>
+    </div>
+    <div class="field"><label>E-mail</label><input type="email" id="cad-email" placeholder="seu@email.com"></div>
+    <div class="field-row">
+      <div class="field"><label>Senha</label><input type="password" id="cad-senha" placeholder="mín. 4 chars"></div>
+      <div class="field"><label>Confirmar</label><input type="password" id="cad-senha2" placeholder="repita"></div>
+    </div>
+    <button class="btn btn-dark btn-full" id="btn-cadastrar" onclick="cadastrar()">
+      <i class="ti ti-user-plus"></i> Criar conta
+    </button>
+  </div>
+</div>
+
+<!-- ===== PONTO ===== -->
+<div id="ponto-screen" class="screen">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div class="avatar" id="av-iniciais">--</div>
+      <div>
+        <div style="font-size:14px;font-weight:600" id="av-nome">--</div>
+        <div style="font-size:11px;color:var(--text2)" id="av-cargo">--</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span id="status-dot" title="Status da conexão"></span>
+      <button class="btn btn-sm" onclick="sair()"><i class="ti ti-logout"></i></button>
+    </div>
+  </div>
+  <div class="content">
+    <div class="clock-wrap">
+      <div class="clock-time" id="relogio">--:--:--</div>
+      <div class="clock-date" id="data-hoje">--</div>
+    </div>
+    <div id="ponto-msg"></div>
+    <div class="ponto-grid">
+      <div class="ponto-card" id="pc-entrada" onclick="baterPonto('entrada')">
+        <i class="ti ti-login pc-icon" style="color:#3b6d11"></i>
+        <div class="pc-label">Entrada</div>
+        <div class="pc-hora" id="ph-entrada">—</div>
+      </div>
+      <div class="ponto-card" id="pc-almoco_ini" onclick="baterPonto('almoco_ini')">
+        <i class="ti ti-coffee pc-icon" style="color:#854f0b"></i>
+        <div class="pc-label">Início almoço</div>
+        <div class="pc-hora" id="ph-almoco_ini">—</div>
+      </div>
+      <div class="ponto-card" id="pc-almoco_fim" onclick="baterPonto('almoco_fim')">
+        <i class="ti ti-coffee-off pc-icon" style="color:#0f6e56"></i>
+        <div class="pc-label">Fim almoço</div>
+        <div class="pc-hora" id="ph-almoco_fim">—</div>
+      </div>
+      <div class="ponto-card" id="pc-saida" onclick="baterPonto('saida')">
+        <i class="ti ti-logout pc-icon" style="color:#a32d2d"></i>
+        <div class="pc-label">Saída</div>
+        <div class="pc-hora" id="ph-saida">—</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Registros de hoje</div>
+      <div id="hoje-lista"><p style="font-size:13px;color:var(--text3)">Nenhum registro ainda.</p></div>
+    </div>
+  </div>
+  <nav class="nav">
+    <button class="nav-btn active" onclick="showTab('ponto')"><i class="ti ti-clock"></i>Ponto</button>
+    <button class="nav-btn" onclick="showTab('historico')"><i class="ti ti-history"></i>Histórico</button>
+    <button class="nav-btn" onclick="showTab('perfil')"><i class="ti ti-user"></i>Perfil</button>
+  </nav>
+</div>
+
+<!-- ===== HISTÓRICO ===== -->
+<div id="historico-screen" class="screen">
+  <div class="topbar">
+    <h1>Histórico</h1>
+    <a id="link-registros" href="#" target="_blank" class="btn btn-sm">
+      <i class="ti ti-brand-github"></i> Ver JSON
+    </a>
+  </div>
+  <div class="content">
+    <div class="resumo-grid" id="resumo-cards"></div>
+    <div id="hist-lista"><p style="font-size:13px;color:var(--text3)">Carregando...</p></div>
+  </div>
+  <nav class="nav">
+    <button class="nav-btn" onclick="showTab('ponto')"><i class="ti ti-clock"></i>Ponto</button>
+    <button class="nav-btn active" onclick="showTab('historico')"><i class="ti ti-history"></i>Histórico</button>
+    <button class="nav-btn" onclick="showTab('perfil')"><i class="ti ti-user"></i>Perfil</button>
+  </nav>
+</div>
+
+<!-- ===== PERFIL ===== -->
+<div id="perfil-screen" class="screen">
+  <div class="topbar"><h1>Perfil</h1></div>
+  <div class="content">
+    <div class="card" id="perfil-card"></div>
+    <div class="card">
+      <div class="card-title">Repositório</div>
+      <div id="repo-info-perfil"></div>
+      <a id="link-repo" href="#" target="_blank" class="btn btn-full" style="margin-top:8px;text-decoration:none">
+        <i class="ti ti-brand-github"></i> Abrir repositório
+      </a>
+      <a id="link-usuarios" href="#" target="_blank" class="btn btn-full" style="text-decoration:none">
+        <i class="ti ti-file-text"></i> Ver usuarios.json
+      </a>
+      <a id="link-registros2" href="#" target="_blank" class="btn btn-full" style="text-decoration:none">
+        <i class="ti ti-file-text"></i> Ver registros.json
+      </a>
+    </div>
+    <button class="btn btn-danger btn-full" onclick="sair()"><i class="ti ti-logout"></i> Sair da conta</button>
+    <button class="btn btn-full" onclick="irPara('config-screen')" style="margin-top:4px">
+      <i class="ti ti-settings"></i> Reconfigurar GitHub
+    </button>
+  </div>
+  <nav class="nav">
+    <button class="nav-btn" onclick="showTab('ponto')"><i class="ti ti-clock"></i>Ponto</button>
+    <button class="nav-btn" onclick="showTab('historico')"><i class="ti ti-history"></i>Histórico</button>
+    <button class="nav-btn active" onclick="showTab('perfil')"><i class="ti ti-user"></i>Perfil</button>
+  </nav>
+</div>
+
+</div><!-- /app -->
+
+<script>
+// ─── CONFIG ───────────────────────────────────────────────────────────────────
+const CFG_KEY = 'ph_config';
+const USER_KEY = 'ph_session';
+
+function getCfg() { try { return JSON.parse(localStorage.getItem(CFG_KEY)||'null'); } catch { return null; } }
+function saveCfg(c) { localStorage.setItem(CFG_KEY, JSON.stringify(c)); }
+function getSession() { try { return JSON.parse(localStorage.getItem(USER_KEY)||'null'); } catch { return null; } }
+function saveSession(u) { localStorage.setItem(USER_KEY, JSON.stringify(u)); }
+function clearSession() { localStorage.removeItem(USER_KEY); }
+
+let CFG = getCfg();
+let USER = null;
+let _timer = null;
+// cache local dos JSONs para evitar múltiplas leituras
+let _cache = { usuarios: null, registros: null };
+
+// ─── GITHUB API ───────────────────────────────────────────────────────────────
+function ghHeaders() {
+  return {
+    'Authorization': `token ${CFG.token}`,
+    'Content-Type': 'application/json',
+    'Accept': 'application/vnd.github+json'
+  };
+}
+
+function ghUrl(path) {
+  return `https://api.github.com/repos/${CFG.user}/${CFG.repo}/contents/${path}`;
+}
+
+async function ghRead(path) {
+  const r = await fetch(ghUrl(path), { headers: ghHeaders() });
+  if (r.status === 404) return { data: null, sha: null };
+  if (!r.ok) throw new Error(`GitHub read error: ${r.status}`);
+  const json = await r.json();
+  const data = JSON.parse(atob(json.content.replace(/\n/g, '')));
+  return { data, sha: json.sha };
+}
+
+async function ghWrite(path, data, sha, mensagem) {
+  const body = {
+    message: mensagem || `PontoHora: atualiza ${path}`,
+    content: btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2)))),
+  };
+  if (sha) body.sha = sha;
+  const r = await fetch(ghUrl(path), {
+    method: 'PUT',
+    headers: ghHeaders(),
+    body: JSON.stringify(body)
+  });
+  if (!r.ok) {
+    const err = await r.json();
+    throw new Error(err.message || `GitHub write error: ${r.status}`);
+  }
+  return await r.json();
+}
+
+async function lerUsuarios() {
+  if (_cache.usuarios) return _cache.usuarios;
+  const { data, sha } = await ghRead('usuarios.json');
+  _cache.usuarios = { data: data || [], sha };
+  return _cache.usuarios;
+}
+
+async function lerRegistros() {
+  if (_cache.registros) return _cache.registros;
+  const { data, sha } = await ghRead('registros.json');
+  _cache.registros = { data: data || [], sha };
+  return _cache.registros;
+}
+
+async function gravarUsuarios(lista, sha, msg) {
+  const res = await ghWrite('usuarios.json', lista, sha, msg || 'PontoHora: atualiza usuarios');
+  _cache.usuarios = { data: lista, sha: res.content.sha };
+}
+
+async function gravarRegistros(lista, sha, msg) {
+  const res = await ghWrite('registros.json', lista, sha, msg || 'PontoHora: atualiza registros');
+  _cache.registros = { data: lista, sha: res.content.sha };
+}
+
+// ─── NAVEGAÇÃO ────────────────────────────────────────────────────────────────
+function irPara(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function showTab(tab) {
+  irPara(tab + '-screen');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('#' + tab + '-screen .nav-btn').forEach((b, i) => {
+    const tabs = ['ponto','historico','perfil'];
+    if (tabs[i] === tab) b.classList.add('active');
+  });
+  if (tab === 'historico') renderHistorico();
+  if (tab === 'perfil') renderPerfil();
+}
+
+// ─── MSG ─────────────────────────────────────────────────────────────────────
+function msg(elId, texto, tipo, dur, spin) {
+  const el = document.getElementById(elId);
+  const s = spin ? '<div class="spinner"></div>' : '';
+  el.innerHTML = `<div class="msg msg-${tipo}">${s}${texto}</div>`;
+  if (dur) setTimeout(() => { el.innerHTML = ''; }, dur);
+}
+function clearMsg(elId) { document.getElementById(elId).innerHTML = ''; }
+
+// ─── STATUS DOT ──────────────────────────────────────────────────────────────
+function setStatus(online) {
+  const el = document.getElementById('status-dot');
+  if (!el) return;
+  el.className = online ? 'online-dot' : 'offline-dot';
+  el.title = online ? 'Conectado ao GitHub' : 'Sem conexão';
+}
+
+// ─── CONFIG ───────────────────────────────────────────────────────────────────
+async function salvarConfig() {
+  const user = document.getElementById('cfg-user').value.trim();
+  const repo = document.getElementById('cfg-repo').value.trim();
+  const token = document.getElementById('cfg-token').value.trim();
+  if (!user || !repo || !token) return msg('config-msg', 'Preencha todos os campos.', 'err', 3000);
+  msg('config-msg', 'Conectando ao GitHub...', 'info', 0, true);
+  CFG = { user, repo, token };
+  try {
+    // testa token
+    const r = await fetch(`https://api.github.com/repos/${user}/${repo}`, { headers: ghHeaders() });
+    if (r.status === 404) {
+      clearMsg('config-msg');
+      return msg('config-msg', 'Repositório não encontrado. Verifique o usuário e nome do repositório.', 'err', 5000);
+    }
+    if (r.status === 401) {
+      clearMsg('config-msg');
+      return msg('config-msg', 'Token inválido ou sem permissão.', 'err', 5000);
+    }
+    // garante que os arquivos JSON existem
+    _cache = { usuarios: null, registros: null };
+    const u = await lerUsuarios();
+    if (u.sha === null) {
+      await gravarUsuarios([], null, 'PontoHora: cria usuarios.json');
+    }
+    const reg = await lerRegistros();
+    if (reg.sha === null) {
+      await gravarRegistros([], null, 'PontoHora: cria registros.json');
+    }
+    saveCfg(CFG);
+    clearMsg('config-msg');
+    atualizarLinksRepo();
+    irPara('login-screen');
+  } catch (e) {
+    clearMsg('config-msg');
+    msg('config-msg', 'Erro: ' + e.message, 'err', 6000);
+  }
+}
+
+function atualizarLinksRepo() {
+  if (!CFG) return;
+  const base = `https://github.com/${CFG.user}/${CFG.repo}`;
+  const raw = `https://raw.githubusercontent.com/${CFG.user}/${CFG.repo}/main`;
+  const el = document.getElementById('login-repo-label');
+  if (el) el.textContent = `${CFG.user}/${CFG.repo}`;
+  const lr = document.getElementById('link-registros');
+  if (lr) lr.href = `${base}/blob/main/registros.json`;
+  const lr2 = document.getElementById('link-registros2');
+  if (lr2) lr2.href = `${base}/blob/main/registros.json`;
+  const lu = document.getElementById('link-usuarios');
+  if (lu) lu.href = `${base}/blob/main/usuarios.json`;
+  const lrepo = document.getElementById('link-repo');
+  if (lrepo) lrepo.href = base;
+}
+
+// ─── CPF MASK ─────────────────────────────────────────────────────────────────
+document.getElementById('cad-cpf').addEventListener('input', function() {
+  let v = this.value.replace(/\D/g,'');
+  v = v.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2');
+  this.value = v;
+});
+
+// ─── CADASTRO ─────────────────────────────────────────────────────────────────
+async function cadastrar() {
+  const nome = document.getElementById('cad-nome').value.trim();
+  const cpf = document.getElementById('cad-cpf').value.trim();
+  const cargo = document.getElementById('cad-cargo').value.trim();
+  const depto = document.getElementById('cad-depto').value.trim();
+  const email = document.getElementById('cad-email').value.trim().toLowerCase();
+  const senha = document.getElementById('cad-senha').value;
+  const senha2 = document.getElementById('cad-senha2').value;
+  if (!nome || !email || !senha) return msg('cad-msg','Preencha nome, e-mail e senha.','err',3000);
+  if (senha.length < 4) return msg('cad-msg','Senha mínima: 4 caracteres.','err',3000);
+  if (senha !== senha2) return msg('cad-msg','Senhas não conferem.','err',3000);
+
+  const btn = document.getElementById('btn-cadastrar');
+  btn.disabled = true;
+  msg('cad-msg','Salvando no GitHub...','info',0,true);
+  try {
+    _cache.usuarios = null;
+    const { data: usuarios, sha } = await lerUsuarios();
+    if (usuarios.find(u => u.email === email)) {
+      btn.disabled = false;
+      return msg('cad-msg','E-mail já cadastrado.','err',3000);
+    }
+    const novo = { id:'u'+Date.now(), nome, cpf, cargo, departamento:depto, email, senha,
+      criadoEm: new Date().toISOString(), admin: usuarios.length === 0 };
+    usuarios.push(novo);
+    await gravarUsuarios(usuarios, sha, `PontoHora: cadastro de ${nome}`);
+    clearMsg('cad-msg');
+    msg('cad-msg','Conta criada! Faça login.','ok',3000);
+    btn.disabled = false;
+    setTimeout(() => irPara('login-screen'), 1400);
+  } catch(e) {
+    btn.disabled = false;
+    msg('cad-msg','Erro ao salvar: '+e.message,'err',5000);
+  }
+}
+
+// ─── LOGIN ────────────────────────────────────────────────────────────────────
+async function fazerLogin() {
+  const email = document.getElementById('login-email').value.trim().toLowerCase();
+  const senha = document.getElementById('login-senha').value;
+  const btn = document.getElementById('btn-login');
+  btn.disabled = true;
+  msg('login-msg','Verificando...','info',0,true);
+  try {
+    _cache.usuarios = null;
+    const { data: usuarios } = await lerUsuarios();
+    const u = usuarios.find(u => u.email === email && u.senha === senha);
+    if (!u) {
+      btn.disabled = false;
+      return msg('login-msg','E-mail ou senha incorretos.','err',3000);
+    }
+    USER = u;
+    saveSession(u);
+    btn.disabled = false;
+    clearMsg('login-msg');
+    iniciarApp();
+  } catch(e) {
+    btn.disabled = false;
+    msg('login-msg','Erro de conexão: '+e.message,'err',5000);
+    setStatus(false);
+  }
+}
+
+function iniciarApp() {
+  const ini = USER.nome.split(' ').slice(0,2).map(p=>p[0]).join('').toUpperCase();
+  document.getElementById('av-iniciais').textContent = ini;
+  document.getElementById('av-nome').textContent = USER.nome.split(' ')[0];
+  document.getElementById('av-cargo').textContent = USER.cargo || USER.departamento || '';
+  setStatus(true);
+  iniciarRelogio();
+  carregarPontoHoje();
+  atualizarLinksRepo();
+  irPara('ponto-screen');
+}
+
+function sair() {
+  USER = null;
+  _cache = { usuarios: null, registros: null };
+  clearSession();
+  clearInterval(_timer);
+  document.getElementById('login-email').value = '';
+  document.getElementById('login-senha').value = '';
+  irPara('login-screen');
+}
+
+// ─── RELÓGIO ─────────────────────────────────────────────────────────────────
+function iniciarRelogio() {
+  clearInterval(_timer);
+  function tick() {
+    const n = new Date();
+    document.getElementById('relogio').textContent = n.toLocaleTimeString('pt-BR');
+    document.getElementById('data-hoje').textContent =
+      n.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  }
+  tick(); _timer = setInterval(tick, 1000);
+}
+
+// ─── PONTO ────────────────────────────────────────────────────────────────────
+function hoje() { return new Date().toISOString().slice(0,10); }
+
+function regHoje(registros) {
+  return registros.filter(r => r.userId === USER.id && r.data === hoje());
+}
+
+async function carregarPontoHoje() {
+  try {
+    _cache.registros = null;
+    const { data: registros } = await lerRegistros();
+    renderBotoesPonto(regHoje(registros));
+  } catch(e) {
+    setStatus(false);
+  }
+}
+
+function renderBotoesPonto(reg) {
+  const tipos = ['entrada','almoco_ini','almoco_fim','saida'];
+  tipos.forEach(t => {
+    const card = document.getElementById('pc-' + t);
+    const horaEl = document.getElementById('ph-' + t);
+    const found = reg.find(r => r.tipo === t);
+    card.classList.remove('loading');
+    card.classList.toggle('done', !!found);
+    horaEl.textContent = found ? found.hora : '—';
+  });
+  const lista = document.getElementById('hoje-lista');
+  if (!reg.length) {
+    lista.innerHTML = '<p style="font-size:13px;color:var(--text3)">Nenhum registro ainda.</p>';
+    return;
+  }
+  const label = {entrada:'Entrada',almoco_ini:'Início almoço',almoco_fim:'Fim almoço',saida:'Saída'};
+  lista.innerHTML = reg.map(r => `
+    <div class="list-row">
+      <span class="badge b-${r.tipo}">${label[r.tipo]}</span>
+      <span style="font-size:15px;font-weight:700;font-variant-numeric:tabular-nums">${r.hora}</span>
+    </div>`).join('');
+}
+
+async function baterPonto(tipo) {
+  if (!USER) return;
+  const card = document.getElementById('pc-' + tipo);
+  if (card.classList.contains('done') || card.classList.contains('loading')) return;
+
+  card.classList.add('loading');
+  msg('ponto-msg','Registrando...','info',0,true);
+
+  try {
+    _cache.registros = null;
+    const { data: registros, sha } = await lerRegistros();
+    if (registros.find(r => r.userId===USER.id && r.data===hoje() && r.tipo===tipo)) {
+      card.classList.remove('loading');
+      clearMsg('ponto-msg');
+      return;
+    }
+    const agora = new Date();
+    const reg = {
+      id: 'r'+Date.now(), userId: USER.id, nomeUsuario: USER.nome,
+      data: hoje(), hora: agora.toLocaleTimeString('pt-BR'),
+      timestamp: agora.toISOString(), tipo
+    };
+    registros.push(reg);
+    await gravarRegistros(registros, sha, `PontoHora: ${USER.nome} - ${tipo} - ${reg.hora}`);
+    setStatus(true);
+    const label = {entrada:'Entrada',almoco_ini:'Início de almoço',almoco_fim:'Fim de almoço',saida:'Saída'};
+    msg('ponto-msg', `${label[tipo]} registrada às <strong>${reg.hora}</strong>`, 'ok', 3000);
+    renderBotoesPonto(regHoje(registros));
+  } catch(e) {
+    card.classList.remove('loading');
+    msg('ponto-msg','Erro ao registrar: '+e.message,'err',5000);
+    setStatus(false);
+  }
+}
+
+// ─── HISTÓRICO ────────────────────────────────────────────────────────────────
+async function renderHistorico() {
+  document.getElementById('hist-lista').innerHTML = '<p style="font-size:13px;color:var(--text3)">Carregando...</p>';
+  try {
+    _cache.registros = null;
+    const { data: registros } = await lerRegistros();
+    const meus = registros.filter(r => r.userId === USER.id)
+      .sort((a,b) => b.timestamp.localeCompare(a.timestamp));
+    const totalDias = [...new Set(meus.map(r=>r.data))].length;
+    document.getElementById('resumo-cards').innerHTML = `
+      <div class="resumo-card"><div class="rc-label">Dias registrados</div><div class="rc-val">${totalDias}</div></div>
+      <div class="resumo-card"><div class="rc-label">Total de batidas</div><div class="rc-val">${meus.length}</div></div>`;
+    if (!meus.length) {
+      document.getElementById('hist-lista').innerHTML = '<p style="font-size:13px;color:var(--text3)">Nenhum registro ainda.</p>';
+      return;
+    }
+    const label = {entrada:'Entrada',almoco_ini:'Início almoço',almoco_fim:'Fim almoço',saida:'Saída'};
+    let html = '', diaAtual = '';
+    meus.forEach(r => {
+      if (r.data !== diaAtual) {
+        diaAtual = r.data;
+        const [y,m,d] = r.data.split('-');
+        html += `<div class="dia-header">${d}/${m}/${y}</div>`;
+      }
+      html += `<div class="list-row">
+        <span class="badge b-${r.tipo}">${label[r.tipo]}</span>
+        <span style="font-size:15px;font-weight:700;font-variant-numeric:tabular-nums">${r.hora}</span>
+      </div>`;
+    });
+    document.getElementById('hist-lista').innerHTML = html;
+  } catch(e) {
+    document.getElementById('hist-lista').innerHTML = `<p style="font-size:13px;color:var(--red-tx)">Erro ao carregar: ${e.message}</p>`;
+    setStatus(false);
+  }
+}
+
+// ─── PERFIL ───────────────────────────────────────────────────────────────────
+async function renderPerfil() {
+  const u = USER;
+  const ini = u.nome.split(' ').slice(0,2).map(p=>p[0]).join('').toUpperCase();
+  let totalReg = 0;
+  try {
+    const { data: registros } = await lerRegistros();
+    totalReg = registros.filter(r => r.userId === u.id).length;
+  } catch {}
+  document.getElementById('perfil-card').innerHTML = `
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <div class="avatar" style="width:50px;height:50px;font-size:16px">${ini}</div>
+      <div>
+        <div style="font-size:16px;font-weight:700">${u.nome} ${u.admin?'<span class="tag-admin">admin</span>':''}</div>
+        <div style="font-size:12px;color:var(--text2)">${u.email}</div>
+      </div>
+    </div>
+    <div class="list-row"><span style="color:var(--text2);font-size:13px">CPF</span><span style="font-size:13px">${u.cpf||'—'}</span></div>
+    <div class="list-row"><span style="color:var(--text2);font-size:13px">Cargo</span><span style="font-size:13px">${u.cargo||'—'}</span></div>
+    <div class="list-row"><span style="color:var(--text2);font-size:13px">Departamento</span><span style="font-size:13px">${u.departamento||'—'}</span></div>
+    <div class="list-row"><span style="color:var(--text2);font-size:13px">Cadastrado em</span><span style="font-size:13px">${new Date(u.criadoEm).toLocaleDateString('pt-BR')}</span></div>
+    <div class="list-row"><span style="color:var(--text2);font-size:13px">Total de batidas</span><span style="font-size:13px;font-weight:700">${totalReg}</span></div>`;
+
+  if (CFG) {
+    document.getElementById('repo-info-perfil').innerHTML =
+      `<p style="font-size:13px;color:var(--text2)">${CFG.user}/${CFG.repo}</p>`;
+  }
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+(function init() {
+  CFG = getCfg();
+  if (!CFG) { irPara('config-screen'); return; }
+  atualizarLinksRepo();
+  // tenta restaurar sessão
+  const session = getSession();
+  if (session) {
+    USER = session;
+    iniciarApp();
+  } else {
+    irPara('login-screen');
+  }
+})();
+</script>
+</body>
+</html>
